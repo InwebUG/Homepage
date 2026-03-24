@@ -1,0 +1,1693 @@
+<!DOCTYPE html>
+<html class="light" lang="de">
+
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;700&amp;family=Manrope:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "accent": "#CC7943",
+                        "on-accent": "#ffffff",
+                        "on-primary-fixed-variant": "#3a4859",
+                        "on-primary": "#ffffff",
+                        "surface-bright": "#f9f9ff",
+                        "on-error-container": "#93000a",
+                        "secondary": "#47607e",
+                        "on-secondary": "#ffffff",
+                        "on-primary-container": "#778598",
+                        "on-secondary-container": "#48617e",
+                        "surface-container-high": "#e0e8ff",
+                        "error": "#ba1a1a",
+                        "surface-container-low": "#f1f3ff",
+                        "on-secondary-fixed": "#001d36",
+                        "on-primary-fixed": "#0f1c2c",
+                        "error-container": "#ffdad6",
+                        "primary-container": "#0D1B2A",
+                        "on-tertiary": "#ffffff",
+                        "background": "#f9f9ff",
+                        "on-tertiary-fixed-variant": "#5d4201",
+                        "secondary-fixed-dim": "#afc9ea",
+                        "on-tertiary-container": "#a17f3b",
+                        "surface-container": "#e8edff",
+                        "inverse-surface": "#263046",
+                        "on-secondary-fixed-variant": "#2f4865",
+                        "on-surface": "#101b30",
+                        "inverse-primary": "#bac8dc",
+                        "surface-dim": "#cfdaf6",
+                        "tertiary-fixed-dim": "#CC7943",
+                        "outline-variant": "#c4c6cc",
+                        "surface": "#f9f9ff",
+                        "on-error": "#ffffff",
+                        "secondary-fixed": "#d1e4ff",
+                        "on-tertiary-fixed": "#261900",
+                        "primary": "#0D1B2A",
+                        "on-surface-variant": "#44474c",
+                        "surface-variant": "#d7e2ff",
+                        "outline": "#74777d",
+                        "tertiary": "#CC7943",
+                        "primary-fixed-dim": "#bac8dc",
+                        "surface-container-lowest": "#ffffff",
+                        "primary-fixed": "#d6e4f9",
+                        "inverse-on-surface": "#edf0ff",
+                        "secondary-container": "#c2dcff",
+                        "tertiary-container": "#261900",
+                        "surface-tint": "#525f71",
+                        "surface-container-highest": "#d7e2ff",
+                        "on-background": "#101b30",
+                        "tertiary-fixed": "#CC7943"
+                    },
+                    fontFamily: {
+                        "headline": ["Noto Serif"],
+                        "body": ["Manrope"],
+                        "label": ["Manrope"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                },
+            },
+        }
+    </script>
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+        
+        .asymmetric-card {
+            border-top-left-radius: 0.75rem;
+            border-bottom-right-radius: 0.75rem;
+        }
+    </style>
+    <style>
+        *,
+         ::before,
+         ::after {
+            --tw-border-spacing-x: 0;
+            --tw-border-spacing-y: 0;
+            --tw-translate-x: 0;
+            --tw-translate-y: 0;
+            --tw-rotate: 0;
+            --tw-skew-x: 0;
+            --tw-skew-y: 0;
+            --tw-scale-x: 1;
+            --tw-scale-y: 1;
+            --tw-pan-x: ;
+            --tw-pan-y: ;
+            --tw-pinch-zoom: ;
+            --tw-scroll-snap-strictness: proximity;
+            --tw-gradient-from-position: ;
+            --tw-gradient-via-position: ;
+            --tw-gradient-to-position: ;
+            --tw-ordinal: ;
+            --tw-slashed-zero: ;
+            --tw-numeric-figure: ;
+            --tw-numeric-spacing: ;
+            --tw-numeric-fraction: ;
+            --tw-ring-inset: ;
+            --tw-ring-offset-width: 0px;
+            --tw-ring-offset-color: #fff;
+            --tw-ring-color: rgb(59 130 246 / 0.5);
+            --tw-ring-offset-shadow: 0 0 #0000;
+            --tw-ring-shadow: 0 0 #0000;
+            --tw-shadow: 0 0 #0000;
+            --tw-shadow-colored: 0 0 #0000;
+            --tw-blur: ;
+            --tw-brightness: ;
+            --tw-contrast: ;
+            --tw-grayscale: ;
+            --tw-hue-rotate: ;
+            --tw-invert: ;
+            --tw-saturate: ;
+            --tw-sepia: ;
+            --tw-drop-shadow: ;
+            --tw-backdrop-blur: ;
+            --tw-backdrop-brightness: ;
+            --tw-backdrop-contrast: ;
+            --tw-backdrop-grayscale: ;
+            --tw-backdrop-hue-rotate: ;
+            --tw-backdrop-invert: ;
+            --tw-backdrop-opacity: ;
+            --tw-backdrop-saturate: ;
+            --tw-backdrop-sepia: ;
+            --tw-contain-size: ;
+            --tw-contain-layout: ;
+            --tw-contain-paint: ;
+            --tw-contain-style:
+        }
+        
+        ::backdrop {
+            --tw-border-spacing-x: 0;
+            --tw-border-spacing-y: 0;
+            --tw-translate-x: 0;
+            --tw-translate-y: 0;
+            --tw-rotate: 0;
+            --tw-skew-x: 0;
+            --tw-skew-y: 0;
+            --tw-scale-x: 1;
+            --tw-scale-y: 1;
+            --tw-pan-x: ;
+            --tw-pan-y: ;
+            --tw-pinch-zoom: ;
+            --tw-scroll-snap-strictness: proximity;
+            --tw-gradient-from-position: ;
+            --tw-gradient-via-position: ;
+            --tw-gradient-to-position: ;
+            --tw-ordinal: ;
+            --tw-slashed-zero: ;
+            --tw-numeric-figure: ;
+            --tw-numeric-spacing: ;
+            --tw-numeric-fraction: ;
+            --tw-ring-inset: ;
+            --tw-ring-offset-width: 0px;
+            --tw-ring-offset-color: #fff;
+            --tw-ring-color: rgb(59 130 246 / 0.5);
+            --tw-ring-offset-shadow: 0 0 #0000;
+            --tw-ring-shadow: 0 0 #0000;
+            --tw-shadow: 0 0 #0000;
+            --tw-shadow-colored: 0 0 #0000;
+            --tw-blur: ;
+            --tw-brightness: ;
+            --tw-contrast: ;
+            --tw-grayscale: ;
+            --tw-hue-rotate: ;
+            --tw-invert: ;
+            --tw-saturate: ;
+            --tw-sepia: ;
+            --tw-drop-shadow: ;
+            --tw-backdrop-blur: ;
+            --tw-backdrop-brightness: ;
+            --tw-backdrop-contrast: ;
+            --tw-backdrop-grayscale: ;
+            --tw-backdrop-hue-rotate: ;
+            --tw-backdrop-invert: ;
+            --tw-backdrop-opacity: ;
+            --tw-backdrop-saturate: ;
+            --tw-backdrop-sepia: ;
+            --tw-contain-size: ;
+            --tw-contain-layout: ;
+            --tw-contain-paint: ;
+            --tw-contain-style:
+        }
+        /* ! tailwindcss v3.4.17 | MIT License | https://tailwindcss.com */
+        
+        *,
+        ::after,
+        ::before {
+            box-sizing: border-box;
+            border-width: 0;
+            border-style: solid;
+            border-color: #e5e7eb
+        }
+        
+        ::after,
+        ::before {
+            --tw-content: ''
+        }
+        
+        :host,
+        html {
+            line-height: 1.5;
+            -webkit-text-size-adjust: 100%;
+            -moz-tab-size: 4;
+            tab-size: 4;
+            font-family: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+            font-feature-settings: normal;
+            font-variation-settings: normal;
+            -webkit-tap-highlight-color: transparent
+        }
+        
+        body {
+            margin: 0;
+            line-height: inherit
+        }
+        
+        hr {
+            height: 0;
+            color: inherit;
+            border-top-width: 1px
+        }
+        
+        abbr:where([title]) {
+            -webkit-text-decoration: underline dotted;
+            text-decoration: underline dotted
+        }
+        
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
+            font-size: inherit;
+            font-weight: inherit
+        }
+        
+        a {
+            color: inherit;
+            text-decoration: inherit
+        }
+        
+        b,
+        strong {
+            font-weight: bolder
+        }
+        
+        code,
+        kbd,
+        pre,
+        samp {
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+            font-feature-settings: normal;
+            font-variation-settings: normal;
+            font-size: 1em
+        }
+        
+        small {
+            font-size: 80%
+        }
+        
+        sub,
+        sup {
+            font-size: 75%;
+            line-height: 0;
+            position: relative;
+            vertical-align: baseline
+        }
+        
+        sub {
+            bottom: -.25em
+        }
+        
+        sup {
+            top: -.5em
+        }
+        
+        table {
+            text-indent: 0;
+            border-color: inherit;
+            border-collapse: collapse
+        }
+        
+        button,
+        input,
+        optgroup,
+        select,
+        textarea {
+            font-family: inherit;
+            font-feature-settings: inherit;
+            font-variation-settings: inherit;
+            font-size: 100%;
+            font-weight: inherit;
+            line-height: inherit;
+            letter-spacing: inherit;
+            color: inherit;
+            margin: 0;
+            padding: 0
+        }
+        
+        button,
+        select {
+            text-transform: none
+        }
+        
+        button,
+        input:where([type=button]),
+        input:where([type=reset]),
+        input:where([type=submit]) {
+            -webkit-appearance: button;
+            background-color: transparent;
+            background-image: none
+        }
+        
+        :-moz-focusring {
+            outline: auto
+        }
+        
+        :-moz-ui-invalid {
+            box-shadow: none
+        }
+        
+        progress {
+            vertical-align: baseline
+        }
+        
+        ::-webkit-inner-spin-button,
+        ::-webkit-outer-spin-button {
+            height: auto
+        }
+        
+        [type=search] {
+            -webkit-appearance: textfield;
+            outline-offset: -2px
+        }
+        
+        ::-webkit-search-decoration {
+            -webkit-appearance: none
+        }
+        
+        ::-webkit-file-upload-button {
+            -webkit-appearance: button;
+            font: inherit
+        }
+        
+        summary {
+            display: list-item
+        }
+        
+        blockquote,
+        dd,
+        dl,
+        figure,
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6,
+        hr,
+        p,
+        pre {
+            margin: 0
+        }
+        
+        fieldset {
+            margin: 0;
+            padding: 0
+        }
+        
+        legend {
+            padding: 0
+        }
+        
+        menu,
+        ol,
+        ul {
+            list-style: none;
+            margin: 0;
+            padding: 0
+        }
+        
+        dialog {
+            padding: 0
+        }
+        
+        textarea {
+            resize: vertical
+        }
+        
+        input::placeholder,
+        textarea::placeholder {
+            opacity: 1;
+            color: #9ca3af
+        }
+        
+        [role=button],
+        button {
+            cursor: pointer
+        }
+        
+        :disabled {
+            cursor: default
+        }
+        
+        audio,
+        canvas,
+        embed,
+        iframe,
+        img,
+        object,
+        svg,
+        video {
+            display: block;
+            vertical-align: middle
+        }
+        
+        img,
+        video {
+            max-width: 100%;
+            height: auto
+        }
+        
+        [hidden]:where(:not([hidden=until-found])) {
+            display: none
+        }
+        
+        [type='text'],
+        input:where(:not([type])),
+        [type='email'],
+        [type='url'],
+        [type='password'],
+        [type='number'],
+        [type='date'],
+        [type='datetime-local'],
+        [type='month'],
+        [type='search'],
+        [type='tel'],
+        [type='time'],
+        [type='week'],
+        [multiple],
+        textarea,
+        select {
+            -webkit-appearance: none;
+            appearance: none;
+            background-color: #fff;
+            border-color: #6b7280;
+            border-width: 1px;
+            border-radius: 0px;
+            padding-top: 0.5rem;
+            padding-right: 0.75rem;
+            padding-bottom: 0.5rem;
+            padding-left: 0.75rem;
+            font-size: 1rem;
+            line-height: 1.5rem;
+            --tw-shadow: 0 0 #0000;
+        }
+        
+        [type='text']:focus,
+        input:where(:not([type])):focus,
+        [type='email']:focus,
+        [type='url']:focus,
+        [type='password']:focus,
+        [type='number']:focus,
+        [type='date']:focus,
+        [type='datetime-local']:focus,
+        [type='month']:focus,
+        [type='search']:focus,
+        [type='tel']:focus,
+        [type='time']:focus,
+        [type='week']:focus,
+        [multiple]:focus,
+        textarea:focus,
+        select:focus {
+            outline: 2px solid transparent;
+            outline-offset: 2px;
+            --tw-ring-inset: var(--tw-empty, /*!*/
+            /*!*/
+            );
+            --tw-ring-offset-width: 0px;
+            --tw-ring-offset-color: #fff;
+            --tw-ring-color: #2563eb;
+            --tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);
+            --tw-ring-shadow: var(--tw-ring-inset) 0 0 0 calc(1px + var(--tw-ring-offset-width)) var(--tw-ring-color);
+            box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
+            border-color: #2563eb
+        }
+        
+        input::placeholder,
+        textarea::placeholder {
+            color: #6b7280;
+            opacity: 1
+        }
+        
+        ::-webkit-datetime-edit-fields-wrapper {
+            padding: 0
+        }
+        
+        ::-webkit-date-and-time-value {
+            min-height: 1.5em;
+            text-align: inherit
+        }
+        
+        ::-webkit-datetime-edit {
+            display: inline-flex
+        }
+        
+        ::-webkit-datetime-edit,
+        ::-webkit-datetime-edit-year-field,
+        ::-webkit-datetime-edit-month-field,
+        ::-webkit-datetime-edit-day-field,
+        ::-webkit-datetime-edit-hour-field,
+        ::-webkit-datetime-edit-minute-field,
+        ::-webkit-datetime-edit-second-field,
+        ::-webkit-datetime-edit-millisecond-field,
+        ::-webkit-datetime-edit-meridiem-field {
+            padding-top: 0;
+            padding-bottom: 0
+        }
+        
+        select {
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+            background-position: right 0.5rem center;
+            background-repeat: no-repeat;
+            background-size: 1.5em 1.5em;
+            padding-right: 2.5rem;
+            print-color-adjust: exact
+        }
+        
+        [multiple],
+        [size]:where(select:not([size="1"])) {
+            background-image: initial;
+            background-position: initial;
+            background-repeat: unset;
+            background-size: initial;
+            padding-right: 0.75rem;
+            print-color-adjust: unset
+        }
+        
+        [type='checkbox'],
+        [type='radio'] {
+            -webkit-appearance: none;
+            appearance: none;
+            padding: 0;
+            print-color-adjust: exact;
+            display: inline-block;
+            vertical-align: middle;
+            background-origin: border-box;
+            -webkit-user-select: none;
+            user-select: none;
+            flex-shrink: 0;
+            height: 1rem;
+            width: 1rem;
+            color: #2563eb;
+            background-color: #fff;
+            border-color: #6b7280;
+            border-width: 1px;
+            --tw-shadow: 0 0 #0000
+        }
+        
+        [type='checkbox'] {
+            border-radius: 0px
+        }
+        
+        [type='radio'] {
+            border-radius: 100%
+        }
+        
+        [type='checkbox']:focus,
+        [type='radio']:focus {
+            outline: 2px solid transparent;
+            outline-offset: 2px;
+            --tw-ring-inset: var(--tw-empty, /*!*/
+            /*!*/
+            );
+            --tw-ring-offset-width: 2px;
+            --tw-ring-offset-color: #fff;
+            --tw-ring-color: #2563eb;
+            --tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);
+            --tw-ring-shadow: var(--tw-ring-inset) 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color);
+            box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow)
+        }
+        
+        [type='checkbox']:checked,
+        [type='radio']:checked {
+            border-color: transparent;
+            background-color: currentColor;
+            background-size: 100% 100%;
+            background-position: center;
+            background-repeat: no-repeat
+        }
+        
+        [type='checkbox']:checked {
+            background-image: url("data:image/svg+xml,%3csvg viewBox='0 0 16 16' fill='white' xmlns='http://www.w3.org/2000/svg'%3e%3cpath d='M12.207 4.793a1 1 0 010 1.414l-5 5a1 1 0 01-1.414 0l-2-2a1 1 0 011.414-1.414L6.5 9.086l4.293-4.293a1 1 0 011.414 0z'/%3e%3c/svg%3e");
+        }
+        
+        @media (forced-colors: active) {
+            [type='checkbox']:checked {
+                -webkit-appearance: auto;
+                appearance: auto
+            }
+        }
+        
+        [type='radio']:checked {
+            background-image: url("data:image/svg+xml,%3csvg viewBox='0 0 16 16' fill='white' xmlns='http://www.w3.org/2000/svg'%3e%3ccircle cx='8' cy='8' r='3'/%3e%3c/svg%3e");
+        }
+        
+        @media (forced-colors: active) {
+            [type='radio']:checked {
+                -webkit-appearance: auto;
+                appearance: auto
+            }
+        }
+        
+        [type='checkbox']:checked:hover,
+        [type='checkbox']:checked:focus,
+        [type='radio']:checked:hover,
+        [type='radio']:checked:focus {
+            border-color: transparent;
+            background-color: currentColor
+        }
+        
+        [type='checkbox']:indeterminate {
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 16 16'%3e%3cpath stroke='white' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M4 8h8'/%3e%3c/svg%3e");
+            border-color: transparent;
+            background-color: currentColor;
+            background-size: 100% 100%;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+        
+        @media (forced-colors: active) {
+            [type='checkbox']:indeterminate {
+                -webkit-appearance: auto;
+                appearance: auto
+            }
+        }
+        
+        [type='checkbox']:indeterminate:hover,
+        [type='checkbox']:indeterminate:focus {
+            border-color: transparent;
+            background-color: currentColor
+        }
+        
+        [type='file'] {
+            background: unset;
+            border-color: inherit;
+            border-width: 0;
+            border-radius: 0;
+            padding: 0;
+            font-size: unset;
+            line-height: inherit
+        }
+        
+        [type='file']:focus {
+            outline: 1px solid ButtonText;
+            outline: 1px auto -webkit-focus-ring-color
+        }
+        
+        .fixed {
+            position: fixed
+        }
+        
+        .absolute {
+            position: absolute
+        }
+        
+        .relative {
+            position: relative
+        }
+        
+        .inset-0 {
+            inset: 0px
+        }
+        
+        .-bottom-10 {
+            bottom: -2.5rem
+        }
+        
+        .-right-10 {
+            right: -2.5rem
+        }
+        
+        .top-0 {
+            top: 0px
+        }
+        
+        .z-0 {
+            z-index: 0
+        }
+        
+        .z-10 {
+            z-index: 10
+        }
+        
+        .z-50 {
+            z-index: 50
+        }
+        
+        .mx-auto {
+            margin-left: auto;
+            margin-right: auto
+        }
+        
+        .mb-16 {
+            margin-bottom: 4rem
+        }
+        
+        .mb-2 {
+            margin-bottom: 0.5rem
+        }
+        
+        .mb-20 {
+            margin-bottom: 5rem
+        }
+        
+        .mb-4 {
+            margin-bottom: 1rem
+        }
+        
+        .mb-6 {
+            margin-bottom: 1.5rem
+        }
+        
+        .mb-8 {
+            margin-bottom: 2rem
+        }
+        
+        .mt-4 {
+            margin-top: 1rem
+        }
+        
+        .mt-8 {
+            margin-top: 2rem
+        }
+        
+        .block {
+            display: block
+        }
+        
+        .inline-block {
+            display: inline-block
+        }
+        
+        .flex {
+            display: flex
+        }
+        
+        .grid {
+            display: grid
+        }
+        
+        .hidden {
+            display: none
+        }
+        
+        .aspect-\[4\/5\] {
+            aspect-ratio: 4/5
+        }
+        
+        .h-1 {
+            height: 0.25rem
+        }
+        
+        .h-12 {
+            height: 3rem
+        }
+        
+        .h-8 {
+            height: 2rem
+        }
+        
+        .h-full {
+            height: 100%
+        }
+        
+        .min-h-\[921px\] {
+            min-height: 921px
+        }
+        
+        .w-12 {
+            width: 3rem
+        }
+        
+        .w-20 {
+            width: 5rem
+        }
+        
+        .w-full {
+            width: 100%
+        }
+        
+        .max-w-2xl {
+            max-width: 42rem
+        }
+        
+        .max-w-7xl {
+            max-width: 80rem
+        }
+        
+        .scale-95 {
+            --tw-scale-x: .95;
+            --tw-scale-y: .95;
+            transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))
+        }
+        
+        .grid-cols-1 {
+            grid-template-columns: repeat(1, minmax(0, 1fr))
+        }
+        
+        .flex-col {
+            flex-direction: column
+        }
+        
+        .flex-wrap {
+            flex-wrap: wrap
+        }
+        
+        .items-center {
+            align-items: center
+        }
+        
+        .justify-between {
+            justify-content: space-between
+        }
+        
+        .gap-12 {
+            gap: 3rem
+        }
+        
+        .gap-16 {
+            gap: 4rem
+        }
+        
+        .gap-3 {
+            gap: 0.75rem
+        }
+        
+        .gap-4 {
+            gap: 1rem
+        }
+        
+        .gap-6 {
+            gap: 1.5rem
+        }
+        
+        .gap-8 {
+            gap: 2rem
+        }
+        
+        .gap-x-4 {
+            column-gap: 1rem
+        }
+        
+        .gap-x-6 {
+            column-gap: 1.5rem
+        }
+        
+        .gap-x-8 {
+            column-gap: 2rem
+        }
+        
+        .-space-x-3> :not([hidden])~ :not([hidden]) {
+            --tw-space-x-reverse: 0;
+            margin-right: calc(-0.75rem * var(--tw-space-x-reverse));
+            margin-left: calc(-0.75rem * calc(1 - var(--tw-space-x-reverse)))
+        }
+        
+        .space-y-4> :not([hidden])~ :not([hidden]) {
+            --tw-space-y-reverse: 0;
+            margin-top: calc(1rem * calc(1 - var(--tw-space-y-reverse)));
+            margin-bottom: calc(1rem * var(--tw-space-y-reverse))
+        }
+        
+        .space-y-8> :not([hidden])~ :not([hidden]) {
+            --tw-space-y-reverse: 0;
+            margin-top: calc(2rem * calc(1 - var(--tw-space-y-reverse)));
+            margin-bottom: calc(2rem * var(--tw-space-y-reverse))
+        }
+        
+        .overflow-hidden {
+            overflow: hidden
+        }
+        
+        .rounded {
+            border-radius: 0.125rem
+        }
+        
+        .rounded-2xl {
+            border-radius: 1rem
+        }
+        
+        .rounded-full {
+            border-radius: 0.75rem
+        }
+        
+        .rounded-lg {
+            border-radius: 0.25rem
+        }
+        
+        .rounded-xl {
+            border-radius: 0.5rem
+        }
+        
+        .border {
+            border-width: 1px
+        }
+        
+        .border-2 {
+            border-width: 2px
+        }
+        
+        .border-b-4 {
+            border-bottom-width: 4px
+        }
+        
+        .border-accent {
+            --tw-border-opacity: 1;
+            border-color: rgb(204 121 67 / var(--tw-border-opacity, 1))
+        }
+        
+        .border-primary {
+            --tw-border-opacity: 1;
+            border-color: rgb(13 27 42 / var(--tw-border-opacity, 1))
+        }
+        
+        .border-slate-200 {
+            --tw-border-opacity: 1;
+            border-color: rgb(226 232 240 / var(--tw-border-opacity, 1))
+        }
+        
+        .border-white\/10 {
+            border-color: rgb(255 255 255 / 0.1)
+        }
+        
+        .bg-accent {
+            --tw-bg-opacity: 1;
+            background-color: rgb(204 121 67 / var(--tw-bg-opacity, 1))
+        }
+        
+        .bg-background {
+            --tw-bg-opacity: 1;
+            background-color: rgb(249 249 255 / var(--tw-bg-opacity, 1))
+        }
+        
+        .bg-primary {
+            --tw-bg-opacity: 1;
+            background-color: rgb(13 27 42 / var(--tw-bg-opacity, 1))
+        }
+        
+        .bg-slate-50\/80 {
+            background-color: rgb(248 250 252 / 0.8)
+        }
+        
+        .bg-surface-container {
+            --tw-bg-opacity: 1;
+            background-color: rgb(232 237 255 / var(--tw-bg-opacity, 1))
+        }
+        
+        .bg-surface-container-high {
+            --tw-bg-opacity: 1;
+            background-color: rgb(224 232 255 / var(--tw-bg-opacity, 1))
+        }
+        
+        .bg-surface-container-low {
+            --tw-bg-opacity: 1;
+            background-color: rgb(241 243 255 / var(--tw-bg-opacity, 1))
+        }
+        
+        .bg-surface-container-lowest {
+            --tw-bg-opacity: 1;
+            background-color: rgb(255 255 255 / var(--tw-bg-opacity, 1))
+        }
+        
+        .bg-white {
+            --tw-bg-opacity: 1;
+            background-color: rgb(255 255 255 / var(--tw-bg-opacity, 1))
+        }
+        
+        .bg-gradient-to-br {
+            background-image: linear-gradient(to bottom right, var(--tw-gradient-stops))
+        }
+        
+        .from-primary\/80 {
+            --tw-gradient-from: rgb(13 27 42 / 0.8) var(--tw-gradient-from-position);
+            --tw-gradient-to: rgb(13 27 42 / 0) var(--tw-gradient-to-position);
+            --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to)
+        }
+        
+        .to-transparent {
+            --tw-gradient-to: transparent var(--tw-gradient-to-position)
+        }
+        
+        .object-cover {
+            object-fit: cover
+        }
+        
+        .p-10 {
+            padding: 2.5rem
+        }
+        
+        .p-12 {
+            padding: 3rem
+        }
+        
+        .p-8 {
+            padding: 2rem
+        }
+        
+        .px-4 {
+            padding-left: 1rem;
+            padding-right: 1rem
+        }
+        
+        .px-6 {
+            padding-left: 1.5rem;
+            padding-right: 1.5rem
+        }
+        
+        .px-8 {
+            padding-left: 2rem;
+            padding-right: 2rem
+        }
+        
+        .py-1\.5 {
+            padding-top: 0.375rem;
+            padding-bottom: 0.375rem
+        }
+        
+        .py-12 {
+            padding-top: 3rem;
+            padding-bottom: 3rem
+        }
+        
+        .py-2 {
+            padding-top: 0.5rem;
+            padding-bottom: 0.5rem
+        }
+        
+        .py-20 {
+            padding-top: 5rem;
+            padding-bottom: 5rem
+        }
+        
+        .py-24 {
+            padding-top: 6rem;
+            padding-bottom: 6rem
+        }
+        
+        .py-3 {
+            padding-top: 0.75rem;
+            padding-bottom: 0.75rem
+        }
+        
+        .py-4 {
+            padding-top: 1rem;
+            padding-bottom: 1rem
+        }
+        
+        .pt-20 {
+            padding-top: 5rem
+        }
+        
+        .pt-4 {
+            padding-top: 1rem
+        }
+        
+        .text-center {
+            text-align: center
+        }
+        
+        .font-body {
+            font-family: Manrope
+        }
+        
+        .font-headline {
+            font-family: Noto Serif
+        }
+        
+        .text-2xl {
+            font-size: 1.5rem;
+            line-height: 2rem
+        }
+        
+        .text-3xl {
+            font-size: 1.875rem;
+            line-height: 2.25rem
+        }
+        
+        .text-4xl {
+            font-size: 2.25rem;
+            line-height: 2.5rem
+        }
+        
+        .text-5xl {
+            font-size: 3rem;
+            line-height: 1
+        }
+        
+        .text-\[10px\] {
+            font-size: 10px
+        }
+        
+        .text-lg {
+            font-size: 1.125rem;
+            line-height: 1.75rem
+        }
+        
+        .text-sm {
+            font-size: 0.875rem;
+            line-height: 1.25rem
+        }
+        
+        .text-xs {
+            font-size: 0.75rem;
+            line-height: 1rem
+        }
+        
+        .font-bold {
+            font-weight: 700
+        }
+        
+        .font-light {
+            font-weight: 300
+        }
+        
+        .font-medium {
+            font-weight: 500
+        }
+        
+        .uppercase {
+            text-transform: uppercase
+        }
+        
+        .italic {
+            font-style: italic
+        }
+        
+        .leading-\[1\.1\] {
+            line-height: 1.1
+        }
+        
+        .leading-relaxed {
+            line-height: 1.625
+        }
+        
+        .leading-tight {
+            line-height: 1.25
+        }
+        
+        .tracking-\[0\.2em\] {
+            letter-spacing: 0.2em
+        }
+        
+        .tracking-tight {
+            letter-spacing: -0.025em
+        }
+        
+        .tracking-wide {
+            letter-spacing: 0.025em
+        }
+        
+        .tracking-wider {
+            letter-spacing: 0.05em
+        }
+        
+        .tracking-widest {
+            letter-spacing: 0.1em
+        }
+        
+        .text-accent {
+            --tw-text-opacity: 1;
+            color: rgb(204 121 67 / var(--tw-text-opacity, 1))
+        }
+        
+        .text-on-accent {
+            --tw-text-opacity: 1;
+            color: rgb(255 255 255 / var(--tw-text-opacity, 1))
+        }
+        
+        .text-on-primary {
+            --tw-text-opacity: 1;
+            color: rgb(255 255 255 / var(--tw-text-opacity, 1))
+        }
+        
+        .text-on-primary-fixed-variant {
+            --tw-text-opacity: 1;
+            color: rgb(58 72 89 / var(--tw-text-opacity, 1))
+        }
+        
+        .text-on-surface {
+            --tw-text-opacity: 1;
+            color: rgb(16 27 48 / var(--tw-text-opacity, 1))
+        }
+        
+        .text-on-surface-variant {
+            --tw-text-opacity: 1;
+            color: rgb(68 71 76 / var(--tw-text-opacity, 1))
+        }
+        
+        .text-primary {
+            --tw-text-opacity: 1;
+            color: rgb(13 27 42 / var(--tw-text-opacity, 1))
+        }
+        
+        .text-slate-100 {
+            --tw-text-opacity: 1;
+            color: rgb(241 245 249 / var(--tw-text-opacity, 1))
+        }
+        
+        .text-slate-300 {
+            --tw-text-opacity: 1;
+            color: rgb(203 213 225 / var(--tw-text-opacity, 1))
+        }
+        
+        .text-slate-400 {
+            --tw-text-opacity: 1;
+            color: rgb(148 163 184 / var(--tw-text-opacity, 1))
+        }
+        
+        .text-slate-500 {
+            --tw-text-opacity: 1;
+            color: rgb(100 116 139 / var(--tw-text-opacity, 1))
+        }
+        
+        .text-slate-600 {
+            --tw-text-opacity: 1;
+            color: rgb(71 85 105 / var(--tw-text-opacity, 1))
+        }
+        
+        .text-white {
+            --tw-text-opacity: 1;
+            color: rgb(255 255 255 / var(--tw-text-opacity, 1))
+        }
+        
+        .placeholder-slate-400::placeholder {
+            --tw-placeholder-opacity: 1;
+            color: rgb(148 163 184 / var(--tw-placeholder-opacity, 1))
+        }
+        
+        .opacity-60 {
+            opacity: 0.6
+        }
+        
+        .opacity-80 {
+            opacity: 0.8
+        }
+        
+        .shadow-2xl {
+            --tw-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.25);
+            --tw-shadow-colored: 0 25px 50px -12px var(--tw-shadow-color);
+            box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)
+        }
+        
+        .shadow-lg {
+            --tw-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+            --tw-shadow-colored: 0 10px 15px -3px var(--tw-shadow-color), 0 4px 6px -4px var(--tw-shadow-color);
+            box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)
+        }
+        
+        .shadow-sm {
+            --tw-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --tw-shadow-colored: 0 1px 2px 0 var(--tw-shadow-color);
+            box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)
+        }
+        
+        .brightness-\[0\.4\] {
+            --tw-brightness: brightness(0.4);
+            filter: var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow)
+        }
+        
+        .grayscale {
+            --tw-grayscale: grayscale(100%);
+            filter: var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow)
+        }
+        
+        .backdrop-blur-md {
+            --tw-backdrop-blur: blur(12px);
+            -webkit-backdrop-filter: var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia);
+            backdrop-filter: var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia)
+        }
+        
+        .transition-all {
+            transition-property: all;
+            transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+            transition-duration: 150ms
+        }
+        
+        .transition-colors {
+            transition-property: color, background-color, border-color, fill, stroke, -webkit-text-decoration-color;
+            transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
+            transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, -webkit-text-decoration-color;
+            transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+            transition-duration: 150ms
+        }
+        
+        .transition-opacity {
+            transition-property: opacity;
+            transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+            transition-duration: 150ms
+        }
+        
+        .duration-300 {
+            transition-duration: 300ms
+        }
+        
+        .duration-700 {
+            transition-duration: 700ms
+        }
+        
+        .selection\:bg-accent\/30 *::selection {
+            background-color: rgb(204 121 67 / 0.3)
+        }
+        
+        .selection\:text-on-surface *::selection {
+            --tw-text-opacity: 1;
+            color: rgb(16 27 48 / var(--tw-text-opacity, 1))
+        }
+        
+        .selection\:bg-accent\/30::selection {
+            background-color: rgb(204 121 67 / 0.3)
+        }
+        
+        .selection\:text-on-surface::selection {
+            --tw-text-opacity: 1;
+            color: rgb(16 27 48 / var(--tw-text-opacity, 1))
+        }
+        
+        .hover\:bg-accent:hover {
+            --tw-bg-opacity: 1;
+            background-color: rgb(204 121 67 / var(--tw-bg-opacity, 1))
+        }
+        
+        .hover\:text-accent:hover {
+            --tw-text-opacity: 1;
+            color: rgb(204 121 67 / var(--tw-text-opacity, 1))
+        }
+        
+        .hover\:text-on-accent:hover {
+            --tw-text-opacity: 1;
+            color: rgb(255 255 255 / var(--tw-text-opacity, 1))
+        }
+        
+        .hover\:text-slate-300:hover {
+            --tw-text-opacity: 1;
+            color: rgb(203 213 225 / var(--tw-text-opacity, 1))
+        }
+        
+        .hover\:underline:hover {
+            -webkit-text-decoration-line: underline;
+            text-decoration-line: underline
+        }
+        
+        .hover\:opacity-100:hover {
+            opacity: 1
+        }
+        
+        .hover\:brightness-110:hover {
+            --tw-brightness: brightness(1.1);
+            filter: var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow)
+        }
+        
+        .hover\:grayscale-0:hover {
+            --tw-grayscale: grayscale(0);
+            filter: var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow)
+        }
+        
+        .focus\:border-accent:focus {
+            --tw-border-opacity: 1;
+            border-color: rgb(204 121 67 / var(--tw-border-opacity, 1))
+        }
+        
+        .focus\:ring-2:focus {
+            --tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);
+            --tw-ring-shadow: var(--tw-ring-inset) 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color);
+            box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000)
+        }
+        
+        .focus\:ring-accent:focus {
+            --tw-ring-opacity: 1;
+            --tw-ring-color: rgb(204 121 67 / var(--tw-ring-opacity, 1))
+        }
+        
+        .active\:scale-90:active {
+            --tw-scale-x: .9;
+            --tw-scale-y: .9;
+            transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))
+        }
+        
+        .active\:scale-\[0\.98\]:active {
+            --tw-scale-x: 0.98;
+            --tw-scale-y: 0.98;
+            transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))
+        }
+        
+        .dark\:bg-slate-950\/80:is(.dark *) {
+            background-color: rgb(2 6 23 / 0.8)
+        }
+        
+        .dark\:text-slate-400:is(.dark *) {
+            --tw-text-opacity: 1;
+            color: rgb(148 163 184 / var(--tw-text-opacity, 1))
+        }
+        
+        .dark\:shadow-none:is(.dark *) {
+            --tw-shadow: 0 0 #0000;
+            --tw-shadow-colored: 0 0 #0000;
+            box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)
+        }
+        
+        @media (min-width: 768px) {
+            .md\:block {
+                display: block
+            }
+            .md\:flex {
+                display: flex
+            }
+            .md\:grid-cols-2 {
+                grid-template-columns: repeat(2, minmax(0, 1fr))
+            }
+            .md\:flex-row {
+                flex-direction: row
+            }
+            .md\:p-10 {
+                padding: 2.5rem
+            }
+            .md\:text-7xl {
+                font-size: 4.5rem;
+                line-height: 1
+            }
+            .md\:text-xl {
+                font-size: 1.25rem;
+                line-height: 1.75rem
+            }
+        }
+        
+        @media (min-width: 1024px) {
+            .lg\:col-span-5 {
+                grid-column: span 5 / span 5
+            }
+            .lg\:col-span-7 {
+                grid-column: span 7 / span 7
+            }
+            .lg\:grid-cols-12 {
+                grid-template-columns: repeat(12, minmax(0, 1fr))
+            }
+            .lg\:grid-cols-2 {
+                grid-template-columns: repeat(2, minmax(0, 1fr))
+            }
+            .lg\:grid-cols-3 {
+                grid-template-columns: repeat(3, minmax(0, 1fr))
+            }
+            .lg\:pl-12 {
+                padding-left: 3rem
+            }
+        }
+    </style>
+</head>
+
+<body class="bg-background text-on-surface font-body selection:bg-accent/30 selection:text-on-surface" data-mode="connect">
+    <!-- TopAppBar Shell -->
+    <nav class="fixed top-0 w-full z-50 bg-slate-50/80 dark:bg-slate-950/80 backdrop-blur-md shadow-sm dark:shadow-none">
+        <div class="flex justify-between items-center px-8 py-4 max-w-7xl mx-auto">
+            <div class="text-2xl font-bold font-noto-serif text-primary">Führungsblick</div>
+            <div class="hidden md:flex items-center space-gap-8 gap-x-8">
+                <a class="text-slate-600 dark:text-slate-400 hover:text-accent transition-colors duration-300" href="#">Sprecher</a>
+                <a class="text-slate-600 dark:text-slate-400 hover:text-accent transition-colors duration-300" href="#">Agenda</a>
+                <a class="text-slate-600 dark:text-slate-400 hover:text-accent transition-colors duration-300" href="#">Venue</a>
+                <a class="text-slate-600 dark:text-slate-400 hover:text-accent transition-colors duration-300" href="#">About</a>
+            </div>
+            <button class="bg-primary text-on-primary font-medium px-6 py-2 rounded-lg scale-95 hover:bg-accent active:scale-90 transition-all">
+                Register Now
+            </button>
+        </div>
+    </nav>
+    <main class="pt-20">
+        <!-- Hero & Registration Section -->
+        <section class="relative min-h-[921px] flex items-center overflow-hidden py-20 px-8">
+            <!-- Hero Background -->
+            <div class="absolute inset-0 z-0">
+                <img alt="" class="w-full h-full object-cover brightness-[0.4]" data-alt="Luxurious corporate event hall with warm ambient lighting, large projection screens, and professional executives engaged in networking." src="https://www.designoffices.de/_next/image?url=https%3A%2F%2Fdo-cms.melantech.io%2Fapi%2Fmedia%2Ffile%2FKey%2520Visual_Coworking%2520Spaces_Stuttgart%2520Tower_DO%2520Lounge_1.jpg&amp;w=3840&amp;q=75">
+                <div class="absolute inset-0 bg-gradient-to-br from-primary/80 to-transparent"></div>
+            </div>
+            <div class="relative z-10 max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                <!-- Hero Content -->
+                <div class="lg:col-span-7 space-y-8">
+                    <span class="inline-block px-4 py-1.5 rounded-full bg-accent text-on-accent text-xs font-bold tracking-widest uppercase">
+                        Führungsblick I 11.05.2026</span>
+                    <h1 class="font-headline text-5xl md:text-7xl text-white leading-[1.1] tracking-tight">
+                        Die Zukunft der <br>
+                        <span class="text-accent italic">Führung</span> neu denken.
+                    </h1>
+                    <p class="text-lg md:text-xl text-slate-300 max-w-2xl font-light leading-relaxed">
+                        Exklusives Networking und visionäre Impulse für Entscheider, die Wandel nicht nur begleiten, sondern gestalten wollen. <br>Erleben Sie Führungsblick 2026.
+                    </p>
+                    <div class="flex items-center gap-6 pt-4">
+                        <div class="flex -space-x-3">
+                            <img alt="" class="w-12 h-12 rounded-full border-2 border-primary object-cover" data-alt="Professional headshot of a senior male executive in a tailored suit." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDjaYQjEEcRIRe3TbNQPTepYBvRoTL2CJ7Cb3BxRJYgOgYGPHe53d9FdBAJywiXv3Q1KnUqg9SI3T9zJBb-dWKIQvHRtzw6MdAtUbMoLfVA07qQYmKPsq4eOT7DaEKV072CZI23MPBpt-BbgdCkeL9MG0di21d1UiLJfCGMxR2KEQT2Ym4qov2fiw88Qb9Q654i3sunlHnMDblyjFxRDfGdpfrmYUQGAzfp0aP7hF4IQdMX5jihl6hUKSf-mSt9JLiLL-VodfTA0w">
+                            <img alt="" class="w-12 h-12 rounded-full border-2 border-primary object-cover" data-alt="Close-up portrait of a confident female leader smiling in a modern office setting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAyiqjzoJ9oViJX6Tbl5cg0RvV6mpuuKBN90JoKkSdeQegZCpuhr0KOfCuY8My_ZglznMEw8zb_044MbKPvm5YvsVysJiSpgeKG7y47mmTm21r_ygVqkPGQcEeW9BHD8QFXru-evtqTm7jy2q-snWX6BytaIXZHlJaA-FIZsjCNqr4Gr_-XRm7ANxjXfxX9ZY_9X-sOEv0r20qJazbf1focv_Rj9dT3FGKZnSGEkunCVzZKpAlE5AB8jK6J8bwQfUUyFaI7gv-WIg">
+                            <img alt="" class="w-12 h-12 rounded-full border-2 border-primary object-cover" data-alt="Portrait of an experienced male director with silver hair, looking thoughtful and authoritative." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAfFRrhJc22hETCkLcT3ijhNQBNM0Bfq1sqFA9weN4NOQaKvPU__O_51f7HWfd38ZlDQQS35yWuCzStiTOLoQEtzDSZ5ACpHzuJyOHT3j_P8_j-uIxFwhVDrsNXGSVM_5eY6I25j9gLH8bh_qsGI3Cdk-bbEn0fqyPwsBSLma1lQxwwdGbCshc0kT0e5FaCWULal1vwqtJnV-XnFEtTTKTAma1Vh8lcGNxizyzv6wPfeCsVJRs1QO-fgY9BIb0dM9_rexu3o3GYnQ">
+                        </div>
+                        <p class="text-sm text-slate-400 font-medium">über 100 zufriedene Top-Führungskräfte</p>
+                    </div>
+                </div>
+                <!-- Registration Form -->
+                <div class="lg:col-span-5">
+                    <div class="glass-effect p-8 md:p-10 rounded-2xl shadow-2xl border border-white/10">
+                        <h3 class="font-headline text-2xl text-primary mb-2">Sichern Sie sich Ihren Platz</h3>
+                        <p class="text-on-primary-fixed-variant text-sm mb-8">Begrenzte Plätze für qualifizierte Bewerber.</p>
+                        <form class="space-y-4">
+                            <div>
+                                <label class="block text-xs font-bold text-on-surface-variant uppercase tracking-wider mb-2">Name</label>
+                                <input class="w-full bg-surface-container-lowest border-slate-200 rounded-lg py-3 px-4 focus:ring-2 focus:ring-accent focus:border-accent text-on-surface placeholder-slate-400" placeholder="Vor- und Nachname" type="text">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-on-surface-variant uppercase tracking-wider mb-2">Unternehmensname</label>
+                                <input class="w-full bg-surface-container-lowest border-slate-200 rounded-lg py-3 px-4 focus:ring-2 focus:ring-accent focus:border-accent text-on-surface placeholder-slate-400" placeholder="Ihr Unternehmen GmbH" type="text">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-on-surface-variant uppercase tracking-wider mb-2">Email</label>
+                                <input class="w-full bg-surface-container-lowest border-slate-200 rounded-lg py-3 px-4 focus:ring-2 focus:ring-accent focus:border-accent text-on-surface placeholder-slate-400" placeholder="name@firma.de" type="email">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-on-surface-variant uppercase tracking-wider mb-2">Telefonnummer</label>
+                                <input class="w-full bg-surface-container-lowest border-slate-200 rounded-lg py-3 px-4 focus:ring-2 focus:ring-accent focus:border-accent text-on-surface placeholder-slate-400" placeholder="+49 000 0000000" type="tel">
+                            </div>
+                            <div class="pt-4">
+                                <button class="w-full bg-accent text-on-accent font-bold py-4 rounded-lg shadow-lg hover:brightness-110 transition-all active:scale-[0.98]">
+                                    Jetzt Registrieren
+                                </button>
+                                <p class="text-[10px] text-center text-on-surface-variant mt-4 leading-relaxed px-4">
+                                    Mit der Anmeldung akzeptieren Sie unsere Datenschutzbestimmungen. Wir behandeln Ihre Daten mit höchster Vertraulichkeit.
+                                </p>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- References & Testimonials Section -->
+        <section class="py-24 px-8 bg-surface-container-low">
+            <div class="max-w-7xl mx-auto">
+                <div class="mb-16">
+                    <span class="text-accent font-bold tracking-[0.2em] text-xs uppercase mb-4 block">Anerkannt von Branchenführern</span>
+                    <h2 class="font-headline text-4xl text-primary mb-6">Stimmen aus dem Netzwerk</h2>
+                    <div class="w-20 h-1 bg-accent"></div>
+                </div>
+                <!-- Logos Tonal Shift Row -->
+                <div class="flex flex-wrap items-center justify-between gap-12 mb-20 opacity-60 grayscale hover:grayscale-0 transition-all duration-700">
+                    <div class="h-8 flex items-center font-headline text-2xl text-slate-400">LUFTHANSA</div>
+                    <div class="h-8 flex items-center font-headline text-2xl text-slate-400">SIEMENS</div>
+                    <div class="h-8 flex items-center font-headline text-2xl text-slate-400">ALLIANZ</div>
+                    <div class="h-8 flex items-center font-headline text-2xl text-slate-400">SAP</div>
+                    <div class="h-8 flex items-center font-headline text-2xl text-slate-400">BMW</div>
+                </div>
+                <!-- Testimonials Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <!-- Testimonial 1 -->
+                    <div class="asymmetric-card bg-surface-container-lowest p-10 shadow-sm flex flex-col justify-between">
+                        <div>
+                            <span class="material-symbols-outlined text-accent text-4xl mb-6">format_quote</span>
+                            <p class="text-on-surface italic leading-relaxed mb-8">
+                                "Führungsblick ist kein gewöhnliches Event. Es ist der Ort, an dem visionäre Ideen auf pragmatische Umsetzungsstrategien treffen. Ein absolutes Muss für jede Führungskraft."
+                            </p>
+                        </div>
+                        <div class="flex items-center gap-4">
+                            <img alt="" class="w-12 h-12 rounded-full object-cover" data-alt="Portrait of a sophisticated male executive with a focused expression, warm lighting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCZXRx4kr_g8Ek6qjt-0bAQWIpfkvbM3JPnCBffW_RFKBC17rEhAqhQuhiIy9UnGx7hz88EEevtZOV8wBi1C5J0F5uvs21tCTtnxfepO8f1koWVHGRLVytU3eV0j2nW3dMGARtBzPGVFuOdPHYZUtx5tTeig1kNlqtELa6sgFRZ6LIgWlapi6Zj3isdYnkm2IA_Lz7wKSOWQbco9S_hZJNyoPMWIsG5wQzOa9dcsbxMG_TbCgVoyKHAGRRHbCuZGSRtaWH-QSsxWA">
+                            <div>
+                                <h4 class="font-bold text-primary text-sm">Dr. Marcus Weber</h4>
+                                <p class="text-xs text-on-surface-variant">Chief Strategy Officer, TechCorp</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Testimonial 2 -->
+                    <div class="asymmetric-card bg-white p-10 shadow-sm border-b-4 border-accent flex flex-col justify-between">
+                        <div>
+                            <span class="material-symbols-outlined text-accent text-4xl mb-6">format_quote</span>
+                            <p class="text-on-surface italic leading-relaxed mb-8">
+                                "Die Qualität der Kontakte und der inhaltliche Tiefgang haben meine Erwartungen bei weitem übertroffen. Die Impulse wirken noch Monate später in unserem Unternehmen nach."
+                            </p>
+                        </div>
+                        <div class="flex items-center gap-4">
+                            <img alt="" class="w-12 h-12 rounded-full object-cover" data-alt="Close-up of a smiling female leader wearing professional attire in an architectural office space." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAb5_C22JBALwZC8EasGAZ6GgBrgf8ENVa4T_IBogmFJRYr4d2_mmmd2d4BXzwsNyDlGvxyjxOXFonFHNGN0gbfh33TX0tbmtHJtLGVgZLO0DMlHE5kz-uGICZhHomtPF1bbxauhey8JZryMJx_DIjlztR9pV6dbPZ3G15sk_xURiQA_7eID5kLu0vcjSmHWgppcLdq7W4AxB90spO4zSSZ3rJ1MKBe3A6mNXBQJBPjzrAeqwlWNVNPjtsVSFSxzwgQfPFgCOinZg">
+                            <div>
+                                <h4 class="font-bold text-primary text-sm">Elena Wagner</h4>
+                                <p class="text-xs text-on-surface-variant">VP Innovation, FutureLogistics</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Testimonial 3 -->
+                    <div class="asymmetric-card bg-surface-container-lowest p-10 shadow-sm flex flex-col justify-between">
+                        <div>
+                            <span class="material-symbols-outlined text-accent text-4xl mb-6">format_quote</span>
+                            <p class="text-on-surface italic leading-relaxed mb-8">
+                                "Wer in einer komplexen Welt navigieren will, braucht den Austausch mit Gleichgesinnten auf Augenhöhe. Führungsblick bietet genau diesen geschützten und inspirierenden Rahmen."
+                            </p>
+                        </div>
+                        <div class="flex items-center gap-4">
+                            <img alt="" class="w-12 h-12 rounded-full object-cover" data-alt="Executive male portrait in business setting with a slight smile and professional confidence." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC_IE2S50oV2ul-BmwnvlHekUzf4lWxp2zs5aIYGUUgHzrkY3hG6x6BcXy9BkJMr_Q1ZGcL3uYw0E-8Adu_XlrdAZbnukLTj0KsZg0jnVznWq_8s1nVwEnw7YXk9cyVfmkRZAK1CUGd4h6VlrCSNdCeOTe1NxyWt48U07IHdte7xFiMm5qAXhfoo0npePKq8z7p6uI1wlbO96JX-RRMd295dQFo3_bzZ3WJ91FyeaLmD4BRKXYxKkMHSkMQaOuz0snSBlp_mDxXgg">
+                            <div>
+                                <h4 class="font-bold text-primary text-sm">Thomas Müller</h4>
+                                <p class="text-xs text-on-surface-variant">Founder &amp; CEO, LeadSystems</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- Signature "Perspective" Section -->
+        <section class="py-24 px-8 overflow-hidden">
+            <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 items-center gap-16">
+                <div class="relative">
+                    <div class="aspect-[4/5] bg-surface-container rounded-xl overflow-hidden shadow-2xl">
+                        <img alt="" class="w-full h-full object-cover" data-alt="Candid shot of executives in a modern conference room engaged in a deep strategic discussion, cinematic depth of field." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA8-ulDthGFPepGuK0SZPjADnc3N2ySx1RnBRaMqAtvL2qhIwxOLK38AhKIP76vdNCL8YwXrO_kyERjzoAC_8S8I-RmPCc3KclZgKDfXbgW_xhENCm0ksQ8letQUrIWXDAC7BgibOo_bnF2k1VhFPvU38mhBqJ2vXHi5BgwrKdvbo03ZYXoQQR83MGWmhwar24d7scUnYeq_mDgxCEvpc6X8KAFsuH-y20md5_I-Ii0oRay1A5_Syg0hwk-yt0YVTjmUWUCqn0Szg">
+                    </div>
+                    <!-- Layered Overlap Element -->
+                    <div class="absolute -bottom-10 -right-10 bg-primary p-12 hidden md:block">
+                        <div class="text-white space-y-4">
+                            <p class="font-headline text-3xl text-accent">98%</p>
+                            <p class="text-xs text-slate-400 uppercase tracking-widest font-bold">Zufriedenheitsquote der <br>Teilnehmer in 2023</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="space-y-8 lg:pl-12">
+                    <h2 class="font-headline text-4xl text-primary leading-tight">Kuratiertes Programm <br>für maximale Wirkung.</h2>
+                    <p class="text-on-surface-variant text-lg leading-relaxed">
+                        Wir glauben nicht an Standardlösungen. Deshalb ist jeder Programmpunkt auf dem Führungsblick Event handverlesen. Wir bringen Themen auf die Agenda, die den Unterschied zwischen Management und wahrer Leadership ausmachen.
+                    </p>
+                    <ul class="space-y-4">
+                        <li class="flex items-center gap-3">
+                            <span class="material-symbols-outlined text-accent">check_circle</span>
+                            <span class="font-medium text-primary">Exklusive Keynotes von Global Playern</span>
+                        </li>
+                        <li class="flex items-center gap-3">
+                            <span class="material-symbols-outlined text-accent">check_circle</span>
+                            <span class="font-medium text-primary">Interaktive Strategie-Panels</span>
+                        </li>
+                        <li class="flex items-center gap-3">
+                            <span class="material-symbols-outlined text-accent">check_circle</span>
+                            <span class="font-medium text-primary">Deep-Dive Masterclasses</span>
+                        </li>
+                    </ul>
+                    <button class="bg-surface-container-high text-primary font-bold px-8 py-4 rounded hover:bg-accent hover:text-on-accent transition-all">
+                        Programm ansehen
+                    </button>
+                </div>
+            </div>
+        </section>
+    </main>
+    <!-- Footer Shell -->
+    <footer class="bg-primary w-full py-12 px-8">
+        <div class="flex flex-col md:flex-row justify-between items-center gap-6 max-w-7xl mx-auto">
+            <div class="font-noto-serif text-lg text-slate-100">Führungsblick</div>
+            <div class="flex gap-x-6 text-slate-400 font-manrope text-sm tracking-wide">
+                <a class="hover:text-accent transition-all hover:underline" href="#">Privacy Policy</a>
+                <a class="hover:text-accent transition-all hover:underline" href="#">Terms of Service</a>
+                <a class="hover:text-accent transition-all hover:underline" href="#">Imprint</a>
+            </div>
+            <div class="flex gap-x-4">
+                <a class="text-accent hover:text-slate-300 opacity-80 hover:opacity-100 transition-opacity" href="#">LinkedIn</a>
+                <a class="text-accent hover:text-slate-300 opacity-80 hover:opacity-100 transition-opacity" href="#">Instagram</a>
+            </div>
+        </div>
+        <div class="mt-8 text-center text-slate-500 font-manrope text-xs">
+            © 2024 Führungsblick Leadership Event. All rights reserved.
+        </div>
+    </footer>
+</body>
+
+</html>
