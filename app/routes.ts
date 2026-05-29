@@ -7,6 +7,8 @@ export const routes = route({
   home: '/',
   // POST endpoint that forwards a contact request to the Supabase function.
   contact: post('contact'),
+  // Reference detail subpages.
+  referenz: get('/referenzen/:slug'),
   // Legal pages (own routes, linked from the footer).
   datenschutz: get('/datenschutz'),
   impressum: get('/impressum'),

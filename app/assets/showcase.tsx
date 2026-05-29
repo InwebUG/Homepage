@@ -71,46 +71,52 @@ const POS = [
 // Colors used to paint the connection lines.
 const CONN_COLORS = ['#20AAFF', '#80E464', '#FFDF5F', '#FF65DB', '#FF5148']
 
-function curve(a: { x: number; y: number }, b: { x: number; y: number }, k = 0.16): string {
+// Orthogonal (right-angle) route between two points: horizontal → vertical →
+// horizontal. Axis-aligned segments stay axis-aligned under the panel's
+// non-uniform scaling, so every turn stays a clean 90°.
+function ortho(a: { x: number; y: number }, b: { x: number; y: number }): string {
   const mx = (a.x + b.x) / 2
-  const my = (a.y + b.y) / 2
-  const dx = b.x - a.x
-  const dy = b.y - a.y
-  const cx = mx - dy * k
-  const cy = my + dx * k
-  return `M${a.x} ${a.y} Q${cx} ${cy} ${b.x} ${b.y}`
+  return `M${a.x} ${a.y} H${mx} V${b.y} H${b.x}`
 }
 
 interface Edge {
-  a: number
-  b: number
   id: string
   color: string
   d: string
 }
 
-// Every icon connected to every other icon (full graph), spread out so the
-// rotating window doesn't always touch the same node, each edge given a color.
-const EDGES: Edge[] = (() => {
-  const raw: Array<[number, number]> = []
-  for (let a = 0; a < POS.length; a++) {
-    for (let b = a + 1; b < POS.length; b++) raw.push([a, b])
+// Round-robin schedule (circle method). In every round each icon has at most
+// one connection (a matching), and across all rounds every pair of icons gets
+// connected exactly once.
+const ROUNDS: Edge[][] = (() => {
+  const n = POS.length
+  const bye = n
+  const m = n % 2 === 1 ? n + 1 : n
+  let arr = Array.from({ length: m }, (_, i) => i)
+  const rounds: Edge[][] = []
+  for (let r = 0; r < m - 1; r++) {
+    const edges: Edge[] = []
+    for (let i = 0; i < m / 2; i++) {
+      const a = arr[i]
+      const b = arr[m - 1 - i]
+      if (a !== bye && b !== bye) {
+        const lo = Math.min(a, b)
+        const hi = Math.max(a, b)
+        edges.push({
+          id: `${lo}-${hi}`,
+          color: CONN_COLORS[edges.length % CONN_COLORS.length],
+          d: ortho(POS[lo], POS[hi]),
+        })
+      }
+    }
+    rounds.push(edges)
+    arr = [arr[0], arr[m - 1], ...arr.slice(1, m - 1)]
   }
-  const len = raw.length
-  // gcd(5, len) === 1 for len === 21, so this is a permutation that interleaves.
-  return raw.map((_, i) => {
-    const [a, b] = raw[(i * 5) % len]
-    return { a, b, id: `${a}-${b}`, color: CONN_COLORS[i % CONN_COLORS.length], d: curve(POS[a], POS[b]) }
-  })
+  return rounds
 })()
 
-const MAX_CONNS = 5
-
-function visibleConnections(tick: number): Edge[] {
-  const start = (tick * 3) % EDGES.length
-  const out: Edge[] = []
-  for (let k = 0; k < MAX_CONNS; k++) out.push(EDGES[(start + k) % EDGES.length])
-  return out
+function currentConnections(tick: number): Edge[] {
+  return ROUNDS[tick % ROUNDS.length] ?? []
 }
 
 export const Showcase = clientEntry(import.meta.url, function Showcase(handle: Handle) {
@@ -275,24 +281,21 @@ export const Showcase = clientEntry(import.meta.url, function Showcase(handle: H
                     mix={linesStyle}
                     style={{ opacity: focused ? 0 : 1 }}
                   >
-                    {(focused ? [] : visibleConnections(tick)).map((edge) => (
+                    {(focused ? [] : currentConnections(tick)).map((edge) => (
                       <path
                         key={edge.id}
                         d={edge.d}
                         fill="none"
                         stroke={edge.color}
-                        stroke-width="1.8"
+                        stroke-width="2"
                         stroke-linecap="round"
+                        stroke-linejoin="round"
                         vector-effect="non-scaling-stroke"
                         mix={[
-                          animateEntrance({ opacity: 0, duration: 500 }),
-                          animateExit({ opacity: 0, duration: 380 }),
+                          animateEntrance({ opacity: 0, duration: 420 }),
+                          animateExit({ opacity: 0, duration: 220 }),
                         ]}
-                        style={{
-                          strokeDasharray: '5 7',
-                          animation: 'dashFlow 1.3s linear infinite',
-                          filter: `drop-shadow(0 0 4px ${edge.color}aa)`,
-                        }}
+                        style={{ filter: `drop-shadow(0 0 4px ${edge.color}aa)` }}
                       />
                     ))}
                   </svg>
