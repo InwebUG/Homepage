@@ -1,13 +1,22 @@
 import { addEventListeners, clientEntry, css, on, ref, type Handle } from 'remix/ui'
+import { animateEntrance, animateExit } from 'remix/ui/animation'
 
-import { IconCart, IconCode, IconDesign, IconGauge, IconServer } from '../ui/icons.tsx'
+import {
+  IconCard,
+  IconCart,
+  IconCode,
+  IconDesign,
+  IconGauge,
+  IconServer,
+  IconUsers,
+} from '../ui/icons.tsx'
 import { ShowcaseAnim } from '../ui/showcase-graphics.tsx'
 import { Container, Eyebrow, GradientText } from '../ui/theme.tsx'
 
 const GENERAL = {
   eyebrow: 'Was wir bauen',
   title: 'Alles für deinen Web-Auftritt — aus einer Hand.',
-  body: 'Fünf Disziplinen, ein Team — vom ersten Pixel bis zur Datenbank. Bewege die Maus über ein Icon oder scrolle, um jede Leistung im Detail zu sehen.',
+  body: 'Sieben Leistungen, ein Team — vom ersten Pixel bis zur Datenbank. Bewege die Maus über ein Icon oder scrolle, um jede Leistung im Detail zu sehen.',
 }
 
 const SERVICES = [
@@ -15,6 +24,11 @@ const SERVICES = [
     title: 'Webdesign & UX',
     body: 'Markenstarke Interfaces, die Vertrauen schaffen und Besucher gezielt zum Abschluss führen.',
     Icon: IconDesign,
+  },
+  {
+    title: 'Vereinsseiten',
+    body: 'Geschützter Mitgliedschaftsbereich, automatische Erstellung von Spendenquittungen und komfortable Mitgliederverwaltung — DSGVO-konform für deinen Verein.',
+    Icon: IconUsers,
   },
   {
     title: 'Frontend-Entwicklung',
@@ -32,29 +46,30 @@ const SERVICES = [
     Icon: IconCart,
   },
   {
+    title: 'Zahlungsabwicklungen',
+    body: 'Zahlungen direkt auf deiner Seite: Apple Pay, Google Pay, PayPal, Kartenzahlung und Banküberweisung — sicher und reibungslos.',
+    Icon: IconCard,
+  },
+  {
     title: 'Performance & SEO',
     body: 'Core Web Vitals im grünen Bereich und technisches SEO, damit du gefunden wirst.',
     Icon: IconGauge,
   },
 ]
 
-// Overview constellation positions (percent of the panel box).
+// Overview constellation positions (percent of the panel box) — one per service.
 const POS = [
-  { x: 24, y: 30 },
-  { x: 74, y: 24 },
-  { x: 50, y: 53 },
-  { x: 28, y: 77 },
-  { x: 78, y: 74 },
+  { x: 20, y: 28 },
+  { x: 50, y: 17 },
+  { x: 80, y: 28 },
+  { x: 31, y: 53 },
+  { x: 69, y: 53 },
+  { x: 31, y: 82 },
+  { x: 69, y: 82 },
 ]
 
-const LINKS: Array<[number, number]> = [
-  [2, 0],
-  [2, 1],
-  [2, 3],
-  [2, 4],
-  [0, 1],
-  [3, 4],
-]
+// Colors used to paint the connection lines.
+const CONN_COLORS = ['#20AAFF', '#80E464', '#FFDF5F', '#FF65DB', '#FF5148']
 
 function curve(a: { x: number; y: number }, b: { x: number; y: number }, k = 0.16): string {
   const mx = (a.x + b.x) / 2
@@ -66,7 +81,37 @@ function curve(a: { x: number; y: number }, b: { x: number; y: number }, k = 0.1
   return `M${a.x} ${a.y} Q${cx} ${cy} ${b.x} ${b.y}`
 }
 
-const PATHS = LINKS.map(([a, b]) => curve(POS[a], POS[b]))
+interface Edge {
+  a: number
+  b: number
+  id: string
+  color: string
+  d: string
+}
+
+// Every icon connected to every other icon (full graph), spread out so the
+// rotating window doesn't always touch the same node, each edge given a color.
+const EDGES: Edge[] = (() => {
+  const raw: Array<[number, number]> = []
+  for (let a = 0; a < POS.length; a++) {
+    for (let b = a + 1; b < POS.length; b++) raw.push([a, b])
+  }
+  const len = raw.length
+  // gcd(5, len) === 1 for len === 21, so this is a permutation that interleaves.
+  return raw.map((_, i) => {
+    const [a, b] = raw[(i * 5) % len]
+    return { a, b, id: `${a}-${b}`, color: CONN_COLORS[i % CONN_COLORS.length], d: curve(POS[a], POS[b]) }
+  })
+})()
+
+const MAX_CONNS = 5
+
+function visibleConnections(tick: number): Edge[] {
+  const start = (tick * 3) % EDGES.length
+  const out: Edge[] = []
+  for (let k = 0; k < MAX_CONNS; k++) out.push(EDGES[(start + k) % EDGES.length])
+  return out
+}
 
 export const Showcase = clientEntry(import.meta.url, function Showcase(handle: Handle) {
   // State (overview by default; SSR renders the stacked, no-JS-friendly list).
@@ -75,6 +120,7 @@ export const Showcase = clientEntry(import.meta.url, function Showcase(handle: H
   let index = 0
   let hover: number | null = null
   let pulse = 0
+  let tick = 0
 
   function setupScroll(section: HTMLElement, signal: AbortSignal) {
     const mq = window.matchMedia('(min-width: 960px)')
@@ -117,12 +163,14 @@ export const Showcase = clientEntry(import.meta.url, function Showcase(handle: H
     addEventListeners(window, signal, { scroll: applyProgress, resize: syncMode })
     syncMode()
 
+    // Rotates the highlighted icon and the visible set of connection lines.
     const timer = setInterval(() => {
       if (pinned && mode === 'overview' && hover === null) {
-        pulse = (pulse + 1) % SERVICES.length
+        tick += 1
+        pulse = tick % SERVICES.length
         handle.update()
       }
-    }, 2200)
+    }, 1900)
     signal.addEventListener('abort', () => clearInterval(timer))
   }
 
@@ -225,17 +273,26 @@ export const Showcase = clientEntry(import.meta.url, function Showcase(handle: H
                     viewBox="0 0 100 100"
                     preserveAspectRatio="none"
                     mix={linesStyle}
-                    style={{ opacity: focused ? 0 : 0.7 }}
+                    style={{ opacity: focused ? 0 : 1 }}
                   >
-                    {PATHS.map((d) => (
+                    {(focused ? [] : visibleConnections(tick)).map((edge) => (
                       <path
-                        d={d}
+                        key={edge.id}
+                        d={edge.d}
                         fill="none"
-                        stroke="#F4EEE8"
-                        stroke-width="1.4"
+                        stroke={edge.color}
+                        stroke-width="1.8"
                         stroke-linecap="round"
                         vector-effect="non-scaling-stroke"
-                        style={{ strokeDasharray: '4 6', animation: 'dashFlow 1.4s linear infinite' }}
+                        mix={[
+                          animateEntrance({ opacity: 0, duration: 500 }),
+                          animateExit({ opacity: 0, duration: 380 }),
+                        ]}
+                        style={{
+                          strokeDasharray: '5 7',
+                          animation: 'dashFlow 1.3s linear infinite',
+                          filter: `drop-shadow(0 0 4px ${edge.color}aa)`,
+                        }}
                       />
                     ))}
                   </svg>

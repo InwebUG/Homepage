@@ -43,6 +43,49 @@ function AnimDesign() {
   )
 }
 
+// Vereinsseiten: member card, member nodes & a donation receipt with a check.
+function AnimClub() {
+  return () => (
+    <Frame>
+      {/* membership card */}
+      <rect x="26" y="40" width="92" height="66" rx="10" />
+      <circle cx="50" cy="62" r="9" />
+      <path d="M42 82a8 8 0 0 1 16 0" />
+      <line x1="70" y1="56" x2="106" y2="56" />
+      <line x1="70" y1="70" x2="100" y2="70" />
+      <line x1="70" y1="84" x2="104" y2="84" stroke={AMBER} />
+      {/* member nodes (management) */}
+      <circle cx="40" cy="124" r="4" fill={CREAM} stroke="none" style={{ animation: 'nodePulse 1.8s ease-in-out infinite' }} />
+      <circle cx="58" cy="128" r="4" fill={CREAM} stroke="none" style={{ animation: 'nodePulse 1.8s ease-in-out 0.4s infinite' }} />
+      <circle cx="76" cy="124" r="4" fill={AMBER} stroke="none" style={{ animation: 'nodePulse 1.8s ease-in-out 0.8s infinite' }} />
+      {/* donation receipt */}
+      <rect x="140" y="34" width="54" height="80" rx="6" stroke={AMBER} />
+      <line x1="150" y1="50" x2="184" y2="50" style={{ strokeDasharray: 50, animation: 'dashFlow 1.6s linear infinite' }} />
+      <line x1="150" y1="62" x2="184" y2="62" style={{ strokeDasharray: 50, animation: 'dashFlow 1.9s linear infinite' }} />
+      <line x1="150" y1="74" x2="172" y2="74" />
+      <path d="M150 92l7 7 13 -16" stroke={AMBER} style={{ strokeDasharray: 120, animation: 'drawLine 1.8s ease infinite' }} />
+    </Frame>
+  )
+}
+
+// Zahlungsabwicklungen: card with contactless waves and a confirmation check.
+function AnimPay() {
+  return () => (
+    <Frame>
+      <rect x="34" y="44" width="104" height="66" rx="10" />
+      <rect x="48" y="60" width="18" height="13" rx="3" stroke={AMBER} />
+      <line x1="48" y1="92" x2="124" y2="92" style={{ strokeDasharray: 90, animation: 'dashFlow 1.6s linear infinite' }} />
+      <line x1="48" y1="100" x2="92" y2="100" />
+      {/* contactless waves */}
+      <path d="M150 60a16 16 0 0 1 0 34" style={{ animation: 'nodePulse 1.6s ease-in-out infinite' }} />
+      <path d="M160 50a28 28 0 0 1 0 54" stroke={AMBER} style={{ animation: 'nodePulse 1.6s ease-in-out 0.4s infinite' }} />
+      {/* confirmation */}
+      <circle cx="120" cy="118" r="16" stroke={AMBER} />
+      <path d="M113 118l5 5 9 -11" style={{ strokeDasharray: 120, animation: 'drawLine 1.8s ease infinite' }} />
+    </Frame>
+  )
+}
+
 // 1 — Frontend: code drawing in with a blinking caret.
 function AnimCode() {
   return () => (
@@ -104,7 +147,8 @@ function AnimGauge() {
   )
 }
 
-const ANIMS = [AnimDesign, AnimCode, AnimServer, AnimCart, AnimGauge]
+// Order must match SERVICES in app/assets/showcase.tsx.
+const ANIMS = [AnimDesign, AnimClub, AnimCode, AnimServer, AnimCart, AnimPay, AnimGauge]
 
 export function ShowcaseAnim() {
   return ({ index }: { index: number }) => {
