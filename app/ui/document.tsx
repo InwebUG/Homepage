@@ -24,7 +24,7 @@ const GLOBAL_CSS = `
 ${rootTokens}
 }
 * { box-sizing: border-box; }
-html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+html { scroll-behavior: smooth; scroll-padding-top: 88px; -webkit-text-size-adjust: 100%; }
 body {
   margin: 0;
   background: var(--bg);

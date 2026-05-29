@@ -236,6 +236,7 @@ const submitStyle = css({
   fontWeight: 700,
   fontFamily: FONT_SANS,
   color: '#000',
+  WebkitTextFillColor: '#000',
   border: 'none',
   borderRadius: '14px',
   cursor: 'pointer',

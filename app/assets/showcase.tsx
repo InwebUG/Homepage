@@ -73,16 +73,12 @@ const CONN_COLORS = ['#20AAFF', '#80E464', '#FFDF5F', '#FF65DB', '#FF5148']
 
 // Orthogonal (right-angle) route between two points: horizontal → vertical →
 // horizontal. Axis-aligned segments stay axis-aligned under the panel's
-// non-uniform scaling, so every turn stays a clean 90°.
-function ortho(a: { x: number; y: number }, b: { x: number; y: number }): string {
-  const mx = (a.x + b.x) / 2
-  return `M${a.x} ${a.y} H${mx} V${b.y} H${b.x}`
-}
-
 interface Edge {
+  a: number
+  b: number
   id: string
   color: string
-  d: string
+  slot: number
 }
 
 // Round-robin schedule (circle method). In every round each icon has at most
@@ -102,11 +98,7 @@ const ROUNDS: Edge[][] = (() => {
       if (a !== bye && b !== bye) {
         const lo = Math.min(a, b)
         const hi = Math.max(a, b)
-        edges.push({
-          id: `${lo}-${hi}`,
-          color: CONN_COLORS[edges.length % CONN_COLORS.length],
-          d: ortho(POS[lo], POS[hi]),
-        })
+        edges.push({ a: lo, b: hi, id: `${lo}-${hi}`, color: CONN_COLORS[edges.length], slot: edges.length })
       }
     }
     rounds.push(edges)
@@ -119,6 +111,56 @@ function currentConnections(tick: number): Edge[] {
   return ROUNDS[tick % ROUNDS.length] ?? []
 }
 
+const ICON_HALF = 36 // px — connect to the icon edge, never its center
+const CORNER = 16 // px corner radius
+
+// Builds an orthogonal polyline with rounded corners through the waypoints.
+function roundedPath(pts: Array<{ x: number; y: number }>, r: number): string {
+  let d = `M${pts[0].x.toFixed(1)} ${pts[0].y.toFixed(1)}`
+  for (let i = 1; i < pts.length - 1; i++) {
+    const p0 = pts[i - 1]
+    const p1 = pts[i]
+    const p2 = pts[i + 1]
+    const d1 = Math.hypot(p1.x - p0.x, p1.y - p0.y)
+    const d2 = Math.hypot(p2.x - p1.x, p2.y - p1.y)
+    const r1 = Math.min(r, d1 / 2)
+    const r2 = Math.min(r, d2 / 2)
+    const a = { x: p1.x - ((p1.x - p0.x) / (d1 || 1)) * r1, y: p1.y - ((p1.y - p0.y) / (d1 || 1)) * r1 }
+    const b = { x: p1.x + ((p2.x - p1.x) / (d2 || 1)) * r2, y: p1.y + ((p2.y - p1.y) / (d2 || 1)) * r2 }
+    d += ` L${a.x.toFixed(1)} ${a.y.toFixed(1)} Q${p1.x.toFixed(1)} ${p1.y.toFixed(1)} ${b.x.toFixed(1)} ${b.y.toFixed(1)}`
+  }
+  const last = pts[pts.length - 1]
+  d += ` L${last.x.toFixed(1)} ${last.y.toFixed(1)}`
+  return d
+}
+
+// Pixel-space orthogonal route between two icons. Exits one icon edge, runs
+// along a per-edge channel (offset by slot so two lines never share a track),
+// and enters the other icon edge. Routes along the dominant axis so short gaps
+// don't get squished.
+function routeEdge(edge: Edge, w: number, h: number): string {
+  const A = { x: (POS[edge.a].x / 100) * w, y: (POS[edge.a].y / 100) * h }
+  const B = { x: (POS[edge.b].x / 100) * w, y: (POS[edge.b].y / 100) * h }
+  const dx = B.x - A.x
+  const dy = B.y - A.y
+  const off = (edge.slot - 1) * 22
+  let pts: Array<{ x: number; y: number }>
+  if (Math.abs(dy) >= Math.abs(dx)) {
+    const sy = dy >= 0 ? 1 : -1
+    const start = { x: A.x, y: A.y + sy * ICON_HALF }
+    const end = { x: B.x, y: B.y - sy * ICON_HALF }
+    const chY = (A.y + B.y) / 2 + off
+    pts = [start, { x: A.x, y: chY }, { x: B.x, y: chY }, end]
+  } else {
+    const sx = dx >= 0 ? 1 : -1
+    const start = { x: A.x + sx * ICON_HALF, y: A.y }
+    const end = { x: B.x - sx * ICON_HALF, y: B.y }
+    const chX = (A.x + B.x) / 2 + off
+    pts = [start, { x: chX, y: A.y }, { x: chX, y: B.y }, end]
+  }
+  return roundedPath(pts, CORNER)
+}
+
 export const Showcase = clientEntry(import.meta.url, function Showcase(handle: Handle) {
   // State (overview by default; SSR renders the stacked, no-JS-friendly list).
   let pinned = false
@@ -127,6 +169,22 @@ export const Showcase = clientEntry(import.meta.url, function Showcase(handle: H
   let hover: number | null = null
   let pulse = 0
   let tick = 0
+  let panelW = 0
+  let panelH = 0
+
+  function observeSize(node: HTMLElement, signal: AbortSignal) {
+    const ro = new ResizeObserver(() => {
+      const w = node.clientWidth
+      const h = node.clientHeight
+      if (Math.abs(w - panelW) > 1 || Math.abs(h - panelH) > 1) {
+        panelW = w
+        panelH = h
+        handle.update()
+      }
+    })
+    ro.observe(node)
+    signal.addEventListener('abort', () => ro.disconnect())
+  }
 
   function setupScroll(section: HTMLElement, signal: AbortSignal) {
     const mq = window.matchMedia('(min-width: 960px)')
@@ -268,34 +326,37 @@ export const Showcase = clientEntry(import.meta.url, function Showcase(handle: H
               {/* Right: constellation panel */}
               <div mix={panelStyle}>
                 <div
-                  mix={[panelInner, on('pointerleave', () => {
-                    if (hover !== null) {
-                      hover = null
-                      handle.update()
-                    }
-                  })]}
+                  mix={[
+                    panelInner,
+                    ref((node, signal) => observeSize(node, signal)),
+                    on('pointerleave', () => {
+                      if (hover !== null) {
+                        hover = null
+                        handle.update()
+                      }
+                    }),
+                  ]}
                 >
                   <svg
-                    viewBox="0 0 100 100"
+                    viewBox={`0 0 ${panelW || 100} ${panelH || 100}`}
                     preserveAspectRatio="none"
                     mix={linesStyle}
                     style={{ opacity: focused ? 0 : 1 }}
                   >
-                    {(focused ? [] : currentConnections(tick)).map((edge) => (
+                    {(focused || !panelW ? [] : currentConnections(tick)).map((edge) => (
                       <path
                         key={edge.id}
-                        d={edge.d}
+                        d={routeEdge(edge, panelW, panelH)}
                         fill="none"
                         stroke={edge.color}
-                        stroke-width="2"
+                        stroke-width="2.5"
                         stroke-linecap="round"
                         stroke-linejoin="round"
-                        vector-effect="non-scaling-stroke"
                         mix={[
                           animateEntrance({ opacity: 0, duration: 420 }),
                           animateExit({ opacity: 0, duration: 220 }),
                         ]}
-                        style={{ filter: `drop-shadow(0 0 4px ${edge.color}aa)` }}
+                        style={{ filter: `drop-shadow(0 0 5px ${edge.color}aa)` }}
                       />
                     ))}
                   </svg>
@@ -324,7 +385,10 @@ export const Showcase = clientEntry(import.meta.url, function Showcase(handle: H
                           borderColor: highlighted || isActive ? '#F0965A' : 'rgba(255,255,255,0.16)',
                           boxShadow: highlighted || isActive ? '0 0 30px rgba(240,150,90,0.5)' : 'none',
                           color: highlighted || isActive ? '#F4EEE8' : 'var(--muted)',
-                          background: highlighted || isActive ? 'rgba(240,150,90,0.12)' : 'var(--surface)',
+                          background:
+                            highlighted || isActive
+                              ? 'linear-gradient(rgba(240,150,90,0.18), rgba(240,150,90,0.18)), #13151d'
+                              : 'var(--surface)',
                         }}
                       >
                         <s.Icon />

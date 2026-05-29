@@ -100,31 +100,77 @@ function setupCursor(signal: AbortSignal) {
 }
 
 // ---------------------------------------------------------------------------
-// Magnetic elements drift toward the pointer while it is near them.
+// Magnetic buttons drift toward the pointer. Only ever ONE button reacts at a
+// time — the one whose center is nearest the pointer (so two adjacent CTAs
+// never get pulled together). The pull is eased every frame for smoothness.
 // ---------------------------------------------------------------------------
 function setupMagnetic(signal: AbortSignal) {
-  const radius = 90
-  const strength = 0.4
-  for (const el of document.querySelectorAll<HTMLElement>('[data-magnetic]')) {
-    const onMove = (event: PointerEvent) => {
-      const rect = el.getBoundingClientRect()
-      const cx = rect.left + rect.width / 2
-      const cy = rect.top + rect.height / 2
-      const dx = event.clientX - cx
-      const dy = event.clientY - cy
-      const dist = Math.hypot(dx, dy)
-      if (dist < rect.width / 2 + radius) {
-        el.style.transform = `translate(${dx * strength}px, ${dy * strength}px)`
+  const els = Array.from(document.querySelectorAll<HTMLElement>('[data-magnetic]'))
+  if (!els.length) return
+
+  const radius = 120
+  const strength = 0.35
+  const state = els.map(() => ({ cx: 0, cy: 0, tx: 0, ty: 0 }))
+  let raf = 0
+
+  const ensureRaf = () => {
+    if (!raf) raf = requestAnimationFrame(tick)
+  }
+
+  const tick = () => {
+    let active = false
+    for (let i = 0; i < els.length; i++) {
+      const s = state[i]
+      s.cx += (s.tx - s.cx) * 0.16
+      s.cy += (s.ty - s.cy) * 0.16
+      if (Math.abs(s.cx) < 0.05 && Math.abs(s.cy) < 0.05 && s.tx === 0 && s.ty === 0) {
+        els[i].style.transform = ''
       } else {
-        el.style.transform = ''
+        els[i].style.transform = `translate(${s.cx.toFixed(2)}px, ${s.cy.toFixed(2)}px)`
+        active = true
       }
     }
-    const reset = () => {
-      el.style.transform = ''
-    }
-    window.addEventListener('pointermove', onMove, { signal })
-    el.addEventListener('pointerleave', reset, { signal })
+    raf = active ? requestAnimationFrame(tick) : 0
   }
+
+  const onMove = (event: PointerEvent) => {
+    // Pick the single nearest button by distance from its center to the pointer
+    // (vertical distance included, so stacked buttons are separated by row).
+    let nearest = -1
+    let nearestDist = Infinity
+    const cx: number[] = []
+    const cy: number[] = []
+    const reach: number[] = []
+    for (let i = 0; i < els.length; i++) {
+      const r = els[i].getBoundingClientRect()
+      cx[i] = r.left + r.width / 2
+      cy[i] = r.top + r.height / 2
+      reach[i] = r.width / 2 + radius
+      const d = Math.hypot(event.clientX - cx[i], event.clientY - cy[i])
+      if (d < nearestDist) {
+        nearestDist = d
+        nearest = i
+      }
+    }
+    for (let i = 0; i < els.length; i++) {
+      const pull = i === nearest && nearestDist < reach[i]
+      state[i].tx = pull ? (event.clientX - cx[i]) * strength : 0
+      state[i].ty = pull ? (event.clientY - cy[i]) * strength : 0
+    }
+    ensureRaf()
+  }
+
+  const reset = () => {
+    for (const s of state) {
+      s.tx = 0
+      s.ty = 0
+    }
+    ensureRaf()
+  }
+
+  window.addEventListener('pointermove', onMove, { signal })
+  document.addEventListener('pointerleave', reset, { signal })
+  signal.addEventListener('abort', () => cancelAnimationFrame(raf))
 }
 
 // ---------------------------------------------------------------------------

@@ -143,6 +143,7 @@ export function PrimaryCta() {
         ctaBase,
         css({
           color: '#000',
+          WebkitTextFillColor: '#000',
           fontWeight: 700,
           backgroundImage: 'var(--brand-grad)',
           backgroundSize: '180% 180%',
@@ -225,7 +226,6 @@ export function Section() {
       mix={css({
         position: 'relative',
         paddingBlock: '96px',
-        scrollMarginTop: '88px',
         '@media (min-width: 768px)': { paddingBlock: '128px' },
       })}
       style={tone === 'soft' ? { background: 'var(--bg-soft)' } : undefined}
