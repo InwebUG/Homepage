@@ -142,7 +142,8 @@ export function PrimaryCta() {
       mix={[
         ctaBase,
         css({
-          color: '#06070a',
+          color: '#000',
+          fontWeight: 700,
           backgroundImage: 'var(--brand-grad)',
           backgroundSize: '180% 180%',
           boxShadow: '0 10px 40px -12px rgba(32, 170, 255, 0.6)',

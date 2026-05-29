@@ -235,7 +235,7 @@ const submitStyle = css({
   fontSize: '16px',
   fontWeight: 700,
   fontFamily: FONT_SANS,
-  color: '#06070a',
+  color: '#000',
   border: 'none',
   borderRadius: '14px',
   cursor: 'pointer',
