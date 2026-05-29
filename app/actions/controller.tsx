@@ -10,6 +10,8 @@ import { routes } from '../routes.ts'
 import { HomePage } from '../ui/home-page.tsx'
 import { DatenschutzPage } from '../ui/legal/datenschutz.tsx'
 import { ImpressumPage } from '../ui/legal/impressum.tsx'
+import { findProject } from '../ui/projects.ts'
+import { ReferenzDetailPage } from '../ui/referenz-page.tsx'
 
 const contactSchema = f.object({
   name: f.field(s.string().pipe(minLength(1))),
@@ -70,6 +72,12 @@ export default createController(routes, {
         return Response.json({ ok: true })
       }
       return redirect(`${routes.home.href()}?status=success#kontakt`)
+    },
+
+    referenz(context) {
+      let project = findProject(context.params.slug)
+      if (!project) return new Response('Not Found', { status: 404 })
+      return context.render(<ReferenzDetailPage project={project} />)
     },
 
     datenschutz(context) {

@@ -1,5 +1,6 @@
 import { type RemixNode } from 'remix/ui'
 
+import { ConsentBanner } from '../assets/consent.tsx'
 import { routes } from '../routes.ts'
 import { FONT_MONO, FONT_SANS, themeTokens } from './theme.tsx'
 
@@ -24,7 +25,7 @@ const GLOBAL_CSS = `
 ${rootTokens}
 }
 * { box-sizing: border-box; }
-html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+html { scroll-behavior: smooth; scroll-padding-top: 88px; -webkit-text-size-adjust: 100%; }
 body {
   margin: 0;
   background: var(--bg);
@@ -99,6 +100,7 @@ export function Document() {
       </head>
       <body>
         {children}
+        <ConsentBanner />
         <script type="module" src={routes.assets.href({ path: 'app/assets/entry.ts' })}></script>
       </body>
     </html>

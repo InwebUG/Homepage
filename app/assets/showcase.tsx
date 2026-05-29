@@ -57,60 +57,80 @@ const SERVICES = [
   },
 ]
 
-// Overview constellation positions (percent of the panel box) — one per service.
-const POS = [
-  { x: 20, y: 28 },
-  { x: 50, y: 17 },
-  { x: 80, y: 28 },
-  { x: 31, y: 53 },
-  { x: 69, y: 53 },
-  { x: 31, y: 82 },
-  { x: 69, y: 82 },
-]
+// Icons sit evenly on a ring (percent of the panel box) — an even, balanced
+// layout. Connections are drawn as soft curves bowing toward the empty center,
+// which keeps them uniform and free of any right-angle "bent arm" shapes.
+const CENTER = { x: 50, y: 50 }
+const RING_RX = 35
+const RING_RY = 38
+const POS = Array.from({ length: 7 }, (_, i) => {
+  const angle = -Math.PI / 2 + (i * 2 * Math.PI) / 7
+  return { x: CENTER.x + RING_RX * Math.cos(angle), y: CENTER.y + RING_RY * Math.sin(angle) }
+})
 
 // Colors used to paint the connection lines.
 const CONN_COLORS = ['#20AAFF', '#80E464', '#FFDF5F', '#FF65DB', '#FF5148']
-
-function curve(a: { x: number; y: number }, b: { x: number; y: number }, k = 0.16): string {
-  const mx = (a.x + b.x) / 2
-  const my = (a.y + b.y) / 2
-  const dx = b.x - a.x
-  const dy = b.y - a.y
-  const cx = mx - dy * k
-  const cy = my + dx * k
-  return `M${a.x} ${a.y} Q${cx} ${cy} ${b.x} ${b.y}`
-}
 
 interface Edge {
   a: number
   b: number
   id: string
   color: string
-  d: string
+  slot: number
 }
 
-// Every icon connected to every other icon (full graph), spread out so the
-// rotating window doesn't always touch the same node, each edge given a color.
-const EDGES: Edge[] = (() => {
-  const raw: Array<[number, number]> = []
-  for (let a = 0; a < POS.length; a++) {
-    for (let b = a + 1; b < POS.length; b++) raw.push([a, b])
+// Round-robin schedule (circle method). In every round each icon has at most
+// one connection (a matching), and across all rounds every pair of icons gets
+// connected exactly once.
+const ROUNDS: Edge[][] = (() => {
+  const n = POS.length
+  const bye = n
+  const m = n % 2 === 1 ? n + 1 : n
+  let arr = Array.from({ length: m }, (_, i) => i)
+  const rounds: Edge[][] = []
+  for (let r = 0; r < m - 1; r++) {
+    const edges: Edge[] = []
+    for (let i = 0; i < m / 2; i++) {
+      const a = arr[i]
+      const b = arr[m - 1 - i]
+      if (a !== bye && b !== bye) {
+        const lo = Math.min(a, b)
+        const hi = Math.max(a, b)
+        edges.push({ a: lo, b: hi, id: `${lo}-${hi}`, color: CONN_COLORS[edges.length], slot: edges.length })
+      }
+    }
+    rounds.push(edges)
+    arr = [arr[0], arr[m - 1], ...arr.slice(1, m - 1)]
   }
-  const len = raw.length
-  // gcd(5, len) === 1 for len === 21, so this is a permutation that interleaves.
-  return raw.map((_, i) => {
-    const [a, b] = raw[(i * 5) % len]
-    return { a, b, id: `${a}-${b}`, color: CONN_COLORS[i % CONN_COLORS.length], d: curve(POS[a], POS[b]) }
-  })
+  return rounds
 })()
 
-const MAX_CONNS = 5
+function currentConnections(tick: number): Edge[] {
+  return ROUNDS[tick % ROUNDS.length] ?? []
+}
 
-function visibleConnections(tick: number): Edge[] {
-  const start = (tick * 3) % EDGES.length
-  const out: Edge[] = []
-  for (let k = 0; k < MAX_CONNS; k++) out.push(EDGES[(start + k) % EDGES.length])
-  return out
+const ICON_HALF = 38 // px — start/end at the icon edge, never inside it
+
+function shift(p: { x: number; y: number }, toward: { x: number; y: number }, dist: number) {
+  const dx = toward.x - p.x
+  const dy = toward.y - p.y
+  const len = Math.hypot(dx, dy) || 1
+  return { x: p.x + (dx / len) * dist, y: p.y + (dy / len) * dist }
+}
+
+// Pixel-space curved connection: a single smooth arc bowing toward the empty
+// center of the ring. Every edge uses the same construction, so the set always
+// looks even; the slot only nudges the bow a touch so two arcs never coincide.
+function routeEdge(edge: Edge, w: number, h: number): string {
+  const A = { x: (POS[edge.a].x / 100) * w, y: (POS[edge.a].y / 100) * h }
+  const B = { x: (POS[edge.b].x / 100) * w, y: (POS[edge.b].y / 100) * h }
+  const c = { x: (CENTER.x / 100) * w, y: (CENTER.y / 100) * h }
+  const mid = { x: (A.x + B.x) / 2, y: (A.y + B.y) / 2 }
+  const bow = 0.5 + edge.slot * 0.08
+  const ctrl = { x: mid.x + (c.x - mid.x) * bow, y: mid.y + (c.y - mid.y) * bow }
+  const start = shift(A, ctrl, ICON_HALF)
+  const end = shift(B, ctrl, ICON_HALF)
+  return `M${start.x.toFixed(1)} ${start.y.toFixed(1)} Q${ctrl.x.toFixed(1)} ${ctrl.y.toFixed(1)} ${end.x.toFixed(1)} ${end.y.toFixed(1)}`
 }
 
 export const Showcase = clientEntry(import.meta.url, function Showcase(handle: Handle) {
@@ -121,6 +141,22 @@ export const Showcase = clientEntry(import.meta.url, function Showcase(handle: H
   let hover: number | null = null
   let pulse = 0
   let tick = 0
+  let panelW = 0
+  let panelH = 0
+
+  function observeSize(node: HTMLElement, signal: AbortSignal) {
+    const ro = new ResizeObserver(() => {
+      const w = node.clientWidth
+      const h = node.clientHeight
+      if (Math.abs(w - panelW) > 1 || Math.abs(h - panelH) > 1) {
+        panelW = w
+        panelH = h
+        handle.update()
+      }
+    })
+    ro.observe(node)
+    signal.addEventListener('abort', () => ro.disconnect())
+  }
 
   function setupScroll(section: HTMLElement, signal: AbortSignal) {
     const mq = window.matchMedia('(min-width: 960px)')
@@ -262,37 +298,37 @@ export const Showcase = clientEntry(import.meta.url, function Showcase(handle: H
               {/* Right: constellation panel */}
               <div mix={panelStyle}>
                 <div
-                  mix={[panelInner, on('pointerleave', () => {
-                    if (hover !== null) {
-                      hover = null
-                      handle.update()
-                    }
-                  })]}
+                  mix={[
+                    panelInner,
+                    ref((node, signal) => observeSize(node, signal)),
+                    on('pointerleave', () => {
+                      if (hover !== null) {
+                        hover = null
+                        handle.update()
+                      }
+                    }),
+                  ]}
                 >
                   <svg
-                    viewBox="0 0 100 100"
+                    viewBox={`0 0 ${panelW || 100} ${panelH || 100}`}
                     preserveAspectRatio="none"
                     mix={linesStyle}
                     style={{ opacity: focused ? 0 : 1 }}
                   >
-                    {(focused ? [] : visibleConnections(tick)).map((edge) => (
+                    {(focused || !panelW ? [] : currentConnections(tick)).map((edge) => (
                       <path
                         key={edge.id}
-                        d={edge.d}
+                        d={routeEdge(edge, panelW, panelH)}
                         fill="none"
                         stroke={edge.color}
-                        stroke-width="1.8"
+                        stroke-width="2.5"
                         stroke-linecap="round"
-                        vector-effect="non-scaling-stroke"
+                        stroke-linejoin="round"
                         mix={[
-                          animateEntrance({ opacity: 0, duration: 500 }),
-                          animateExit({ opacity: 0, duration: 380 }),
+                          animateEntrance({ opacity: 0, duration: 420 }),
+                          animateExit({ opacity: 0, duration: 220 }),
                         ]}
-                        style={{
-                          strokeDasharray: '5 7',
-                          animation: 'dashFlow 1.3s linear infinite',
-                          filter: `drop-shadow(0 0 4px ${edge.color}aa)`,
-                        }}
+                        style={{ filter: `drop-shadow(0 0 5px ${edge.color}aa)` }}
                       />
                     ))}
                   </svg>
@@ -321,7 +357,10 @@ export const Showcase = clientEntry(import.meta.url, function Showcase(handle: H
                           borderColor: highlighted || isActive ? '#F0965A' : 'rgba(255,255,255,0.16)',
                           boxShadow: highlighted || isActive ? '0 0 30px rgba(240,150,90,0.5)' : 'none',
                           color: highlighted || isActive ? '#F4EEE8' : 'var(--muted)',
-                          background: highlighted || isActive ? 'rgba(240,150,90,0.12)' : 'var(--surface)',
+                          background:
+                            highlighted || isActive
+                              ? 'linear-gradient(rgba(240,150,90,0.18), rgba(240,150,90,0.18)), #13151d'
+                              : 'var(--surface)',
                         }}
                       >
                         <s.Icon />

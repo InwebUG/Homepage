@@ -6,6 +6,7 @@ import { Showcase } from '../assets/showcase.tsx'
 import { routes } from '../routes.ts'
 import { Document } from './document.tsx'
 import { IconCheck } from './icons.tsx'
+import { PROJECTS } from './projects.ts'
 import {
   Container,
   Eyebrow,
@@ -392,31 +393,6 @@ const stepNumStyle = css({
 // ===========================================================================
 // Proof — project references + animated stats
 // ===========================================================================
-//
-// Replace the placeholder image/title/text per project. Images live in
-// public/projects/ — swap the SVGs for real screenshots (e.g. .jpg/.webp) and
-// update the `image` path.
-const PROJECTS = [
-  {
-    image: '/projects/project-1.svg',
-    title: 'Helios Studio — Markenwebsite',
-    body: 'Neues Markenbild mit headless CMS. Conversion-Rate nach dem Relaunch verdoppelt.',
-    tags: ['Webdesign', 'CMS', 'SEO'],
-  },
-  {
-    image: '/projects/project-2.svg',
-    title: 'NordVolt — SaaS-Plattform',
-    body: 'Full-Stack-Plattform mit Auth, Dashboard und skalierbarer API auf solidem Backend.',
-    tags: ['Frontend', 'Backend', 'API'],
-  },
-  {
-    image: '/projects/project-3.svg',
-    title: 'Kanto — Online-Shop',
-    body: 'Headless Shop mit Stripe-Checkout und optimiertem Funnel für mehr Bestellungen.',
-    tags: ['E-Commerce', 'Stripe', 'Performance'],
-  },
-]
-
 const STATS = [
   ['38', '', 0, 'Projekte ausgeliefert'],
   ['100', '%', 0, 'Termintreue'],
@@ -445,7 +421,13 @@ function Proof() {
         >
           {PROJECTS.map((p, i) => (
             <div data-reveal data-reveal-delay={`${(i % 3) * 90}`}>
-              <ProjectCard image={p.image} title={p.title} body={p.body} tags={p.tags} />
+              <ProjectCard
+                href={routes.referenz.href({ slug: p.slug })}
+                image={p.image}
+                title={p.title}
+                body={p.summary}
+                tags={p.tags}
+              />
             </div>
           ))}
         </div>
@@ -494,17 +476,19 @@ function Proof() {
 
 function ProjectCard() {
   return ({
+    href,
     image,
     title,
     body,
     tags,
   }: {
+    href: string
     image: string
     title: string
     body: string
     tags: string[]
   }) => (
-    <article data-tilt mix={projectStyle}>
+    <a href={href} data-tilt mix={projectStyle}>
       <div mix={css({ aspectRatio: '16 / 10', overflow: 'hidden', background: 'var(--surface-2)' })}>
         <img
           src={image}
@@ -518,7 +502,15 @@ function ProjectCard() {
           })}
         />
       </div>
-      <div mix={css({ padding: '22px', display: 'flex', flexDirection: 'column', gap: '12px' })}>
+      <div
+        mix={css({
+          padding: '22px',
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '12px',
+          flex: '1 1 auto',
+        })}
+      >
         <h3 mix={css({ fontSize: '19px', fontWeight: 700 })}>{title}</h3>
         <p mix={css({ fontSize: '15px', color: 'var(--muted)' })}>{body}</p>
         <div mix={css({ display: 'flex', flexWrap: 'wrap', gap: '8px', marginTop: '2px' })}>
@@ -526,8 +518,14 @@ function ProjectCard() {
             <span mix={tagStyle}>{t}</span>
           ))}
         </div>
+        <span className="view" mix={viewLink}>
+          Projekt ansehen
+          <svg width="15" height="15" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+            <path d="M3 8h9M8.5 4l4 4-4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+        </span>
       </div>
-    </article>
+    </a>
   )
 }
 
@@ -539,9 +537,24 @@ const projectStyle = css({
   overflow: 'hidden',
   background: 'var(--surface)',
   border: '1px solid var(--border)',
+  textDecoration: 'none',
+  color: 'inherit',
   transition: 'transform 300ms ease, border-color 300ms ease',
   '&:hover': { borderColor: 'var(--border-strong)' },
   '&:hover img': { transform: 'scale(1.05)' },
+  '&:hover .view': { gap: '12px', color: 'var(--text)' },
+})
+
+const viewLink = css({
+  marginTop: 'auto',
+  paddingTop: '6px',
+  display: 'inline-flex',
+  alignItems: 'center',
+  gap: '8px',
+  fontSize: '14px',
+  fontWeight: 600,
+  color: 'var(--brand)',
+  transition: 'gap 200ms ease, color 200ms ease',
 })
 
 const tagStyle = css({

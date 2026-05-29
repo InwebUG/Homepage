@@ -78,6 +78,14 @@ Alle browserseitig, via `prefers-reduced-motion` abschaltbar: eigener Trailing-C
 magnetische Buttons, 3D-Tilt-Karten, Scroll-Reveals, hochzählende Kennzahlen,
 cursor-folgender Hero-Glow, scroll-bewusste Navigation.
 
+## Google Analytics & Cookie-Consent
+
+Ein Consent-Banner (`app/assets/consent.tsx`) erscheint beim ersten Besuch.
+Google Analytics wird **erst nach Einwilligung** geladen (mit IP-Anonymisierung);
+die Entscheidung wird in `localStorage` gemerkt. Trage deine Measurement-ID in
+`GA_MEASUREMENT_ID` (oben in `consent.tsx`) ein, um Analytics zu aktivieren —
+ohne ID funktioniert der Banner, lädt aber kein Tracking.
+
 ## Referenzen / Bilder austauschen
 
 Projekte stehen in `PROJECTS` in `app/ui/home-page.tsx`. Bilder liegen in
