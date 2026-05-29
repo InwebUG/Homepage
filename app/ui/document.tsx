@@ -1,5 +1,6 @@
 import { type RemixNode } from 'remix/ui'
 
+import { ConsentBanner } from '../assets/consent.tsx'
 import { routes } from '../routes.ts'
 import { FONT_MONO, FONT_SANS, themeTokens } from './theme.tsx'
 
@@ -99,6 +100,7 @@ export function Document() {
       </head>
       <body>
         {children}
+        <ConsentBanner />
         <script type="module" src={routes.assets.href({ path: 'app/assets/entry.ts' })}></script>
       </body>
     </html>

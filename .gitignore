@@ -4,3 +4,9 @@ tmp/
 *.log
 .env
 .env.local
+
+# stray sqlite artifacts (backend is Supabase now)
+db/
+*.db
+*.db-shm
+*.db-wal

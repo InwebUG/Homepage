@@ -57,22 +57,20 @@ const SERVICES = [
   },
 ]
 
-// Overview constellation positions (percent of the panel box) — one per service.
-const POS = [
-  { x: 20, y: 28 },
-  { x: 50, y: 17 },
-  { x: 80, y: 28 },
-  { x: 31, y: 53 },
-  { x: 69, y: 53 },
-  { x: 31, y: 82 },
-  { x: 69, y: 82 },
-]
+// Icons sit evenly on a ring (percent of the panel box) — an even, balanced
+// layout. Connections are drawn as soft curves bowing toward the empty center,
+// which keeps them uniform and free of any right-angle "bent arm" shapes.
+const CENTER = { x: 50, y: 50 }
+const RING_RX = 35
+const RING_RY = 38
+const POS = Array.from({ length: 7 }, (_, i) => {
+  const angle = -Math.PI / 2 + (i * 2 * Math.PI) / 7
+  return { x: CENTER.x + RING_RX * Math.cos(angle), y: CENTER.y + RING_RY * Math.sin(angle) }
+})
 
 // Colors used to paint the connection lines.
 const CONN_COLORS = ['#20AAFF', '#80E464', '#FFDF5F', '#FF65DB', '#FF5148']
 
-// Orthogonal (right-angle) route between two points: horizontal → vertical →
-// horizontal. Axis-aligned segments stay axis-aligned under the panel's
 interface Edge {
   a: number
   b: number
@@ -111,54 +109,28 @@ function currentConnections(tick: number): Edge[] {
   return ROUNDS[tick % ROUNDS.length] ?? []
 }
 
-const ICON_HALF = 36 // px — connect to the icon edge, never its center
-const CORNER = 16 // px corner radius
+const ICON_HALF = 38 // px — start/end at the icon edge, never inside it
 
-// Builds an orthogonal polyline with rounded corners through the waypoints.
-function roundedPath(pts: Array<{ x: number; y: number }>, r: number): string {
-  let d = `M${pts[0].x.toFixed(1)} ${pts[0].y.toFixed(1)}`
-  for (let i = 1; i < pts.length - 1; i++) {
-    const p0 = pts[i - 1]
-    const p1 = pts[i]
-    const p2 = pts[i + 1]
-    const d1 = Math.hypot(p1.x - p0.x, p1.y - p0.y)
-    const d2 = Math.hypot(p2.x - p1.x, p2.y - p1.y)
-    const r1 = Math.min(r, d1 / 2)
-    const r2 = Math.min(r, d2 / 2)
-    const a = { x: p1.x - ((p1.x - p0.x) / (d1 || 1)) * r1, y: p1.y - ((p1.y - p0.y) / (d1 || 1)) * r1 }
-    const b = { x: p1.x + ((p2.x - p1.x) / (d2 || 1)) * r2, y: p1.y + ((p2.y - p1.y) / (d2 || 1)) * r2 }
-    d += ` L${a.x.toFixed(1)} ${a.y.toFixed(1)} Q${p1.x.toFixed(1)} ${p1.y.toFixed(1)} ${b.x.toFixed(1)} ${b.y.toFixed(1)}`
-  }
-  const last = pts[pts.length - 1]
-  d += ` L${last.x.toFixed(1)} ${last.y.toFixed(1)}`
-  return d
+function shift(p: { x: number; y: number }, toward: { x: number; y: number }, dist: number) {
+  const dx = toward.x - p.x
+  const dy = toward.y - p.y
+  const len = Math.hypot(dx, dy) || 1
+  return { x: p.x + (dx / len) * dist, y: p.y + (dy / len) * dist }
 }
 
-// Pixel-space orthogonal route between two icons. Exits one icon edge, runs
-// along a per-edge channel (offset by slot so two lines never share a track),
-// and enters the other icon edge. Routes along the dominant axis so short gaps
-// don't get squished.
+// Pixel-space curved connection: a single smooth arc bowing toward the empty
+// center of the ring. Every edge uses the same construction, so the set always
+// looks even; the slot only nudges the bow a touch so two arcs never coincide.
 function routeEdge(edge: Edge, w: number, h: number): string {
   const A = { x: (POS[edge.a].x / 100) * w, y: (POS[edge.a].y / 100) * h }
   const B = { x: (POS[edge.b].x / 100) * w, y: (POS[edge.b].y / 100) * h }
-  const dx = B.x - A.x
-  const dy = B.y - A.y
-  const off = (edge.slot - 1) * 22
-  let pts: Array<{ x: number; y: number }>
-  if (Math.abs(dy) >= Math.abs(dx)) {
-    const sy = dy >= 0 ? 1 : -1
-    const start = { x: A.x, y: A.y + sy * ICON_HALF }
-    const end = { x: B.x, y: B.y - sy * ICON_HALF }
-    const chY = (A.y + B.y) / 2 + off
-    pts = [start, { x: A.x, y: chY }, { x: B.x, y: chY }, end]
-  } else {
-    const sx = dx >= 0 ? 1 : -1
-    const start = { x: A.x + sx * ICON_HALF, y: A.y }
-    const end = { x: B.x - sx * ICON_HALF, y: B.y }
-    const chX = (A.x + B.x) / 2 + off
-    pts = [start, { x: chX, y: A.y }, { x: chX, y: B.y }, end]
-  }
-  return roundedPath(pts, CORNER)
+  const c = { x: (CENTER.x / 100) * w, y: (CENTER.y / 100) * h }
+  const mid = { x: (A.x + B.x) / 2, y: (A.y + B.y) / 2 }
+  const bow = 0.5 + edge.slot * 0.08
+  const ctrl = { x: mid.x + (c.x - mid.x) * bow, y: mid.y + (c.y - mid.y) * bow }
+  const start = shift(A, ctrl, ICON_HALF)
+  const end = shift(B, ctrl, ICON_HALF)
+  return `M${start.x.toFixed(1)} ${start.y.toFixed(1)} Q${ctrl.x.toFixed(1)} ${ctrl.y.toFixed(1)} ${end.x.toFixed(1)} ${end.y.toFixed(1)}`
 }
 
 export const Showcase = clientEntry(import.meta.url, function Showcase(handle: Handle) {
