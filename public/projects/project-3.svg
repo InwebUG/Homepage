@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" fill="none">
+  <defs>
+    <linearGradient id="bg3" x1="0" y1="0" x2="800" y2="500" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#11131b"/><stop offset="1" stop-color="#171a24"/>
+    </linearGradient>
+    <radialGradient id="gl3" cx="0" cy="0" r="1" gradientTransform="translate(400 420) scale(380)" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FF65DB" stop-opacity="0.38"/><stop offset="1" stop-color="#FF65DB" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="800" height="500" fill="url(#bg3)"/>
+  <rect width="800" height="500" fill="url(#gl3)"/>
+  <g stroke="#F4EEE8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" opacity="0.9" fill="none">
+    <rect x="190" y="130" width="130" height="170" rx="14"/>
+    <rect x="335" y="130" width="130" height="170" rx="14" stroke="#F0965A"/>
+    <rect x="480" y="130" width="130" height="170" rx="14"/>
+    <line x1="210" y1="265" x2="300" y2="265"/>
+    <line x1="355" y1="265" x2="445" y2="265"/>
+    <line x1="500" y1="265" x2="590" y2="265"/>
+    <path d="M300 350h20l14 56h150l18-44H334"/>
+    <circle cx="356" cy="430" r="8"/>
+    <circle cx="470" cy="430" r="8"/>
+    <circle cx="395" cy="118" r="14" fill="#F0965A" stroke="none"/>
+  </g>
+  <text x="40" y="470" fill="#6a7080" font-family="monospace" font-size="20">Kanto Shop · Platzhalter</text>
+</svg>

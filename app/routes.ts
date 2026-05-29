@@ -3,8 +3,11 @@ import { get, post, route } from 'remix/routes'
 export const routes = route({
   // Serves compiled browser modules (client entries) from the asset pipeline.
   assets: get('/assets/*path'),
-  // The single page of this onepager.
+  // The single landing page of this onepager.
   home: '/',
-  // POST endpoint that receives a booking/lead request and persists it.
-  book: post('book'),
+  // POST endpoint that forwards a contact request to the Supabase function.
+  contact: post('contact'),
+  // Legal pages (own routes, linked from the footer).
+  datenschutz: get('/datenschutz'),
+  impressum: get('/impressum'),
 })

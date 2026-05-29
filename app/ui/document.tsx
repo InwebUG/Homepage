@@ -47,6 +47,13 @@ code, kbd, .mono { font-family: ${FONT_MONO}; }
 @keyframes floatBlob { 0%, 100% { transform: translate(0, 0) scale(1); } 50% { transform: translate(24px, -28px) scale(1.08); } }
 @keyframes auroraShift { 0%, 100% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } }
 @keyframes spinSlow { to { transform: rotate(360deg); } }
+@keyframes dashFlow { to { stroke-dashoffset: -28; } }
+@keyframes nodePulse { 0%, 100% { opacity: 0.35; transform: scale(0.85); } 50% { opacity: 1; transform: scale(1.1); } }
+@keyframes needleSweep { 0%, 100% { transform: rotate(-46deg); } 50% { transform: rotate(46deg); } }
+@keyframes bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
+@keyframes blink { 0%, 49% { opacity: 1; } 50%, 100% { opacity: 0; } }
+@keyframes dropIn { 0% { transform: translateY(-16px); opacity: 0; } 40% { opacity: 1; } 70% { transform: translateY(0); } 100% { transform: translateY(0); opacity: 1; } }
+@keyframes drawLine { from { stroke-dashoffset: 120; } to { stroke-dashoffset: 0; } }
 
 /* Scroll reveals only hide when JS is confirmed (html.js). Without JS — or if
    hydration never runs — content stays fully visible. */

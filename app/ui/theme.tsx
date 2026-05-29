@@ -28,6 +28,47 @@ export const FONT_SANS =
   "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif"
 export const FONT_MONO = "'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace"
 
+/** The inweb logo mark (provided artwork). Inherits no color — uses its own
+ * cream + amber fills, which sit well on the dark canvas. */
+export function LogoMark() {
+  return ({ size = 28 }: { size?: number }) => (
+    <svg
+      width={(size * 77) / 73}
+      height={size}
+      viewBox="0 0 77 73"
+      fill="none"
+      role="img"
+      aria-label="inweb"
+    >
+      <path d="M26.9574 40.7648L13.7418 31.5265L11.966 51.1695L25.1817 60.4077L26.9574 40.7648Z" fill="#F4EEE8" />
+      <path d="M65.3809 22.6021L52.1652 13.3638L50.3895 33.0067L63.6051 42.245L65.3809 22.6021Z" fill="#F4EEE8" />
+      <path d="M62.4543 53.85L37.592 65.6023L39.2937 49.3127L48.7866 44.8254L62.4543 53.85Z" fill="#F4EEE8" />
+      <path d="M15.8215 18.3764L40.6837 6.62405L38.982 22.9137L29.4892 27.401L15.8215 18.3764Z" fill="#F4EEE8" />
+      <path d="M37.0173 40.9869L36.5244 32.9242L42.4418 38.4228L37.0173 40.9869Z" fill="#F0965A" />
+    </svg>
+  )
+}
+
+/** Logo lockup: mark + wordmark. */
+export function Wordmark() {
+  return ({ size = 28 }: { size?: number }) => (
+    <span
+      mix={css({
+        display: 'inline-flex',
+        alignItems: 'center',
+        gap: '10px',
+        fontSize: '21px',
+        fontWeight: 800,
+        letterSpacing: '-0.02em',
+        color: 'var(--text)',
+      })}
+    >
+      <LogoMark size={size} />
+      inweb
+    </span>
+  )
+}
+
 /** Centered, padded content column shared by every section. */
 export function Container() {
   return ({ children, wide = false }: { children: RemixNode; wide?: boolean }) => (

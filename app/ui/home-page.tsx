@@ -2,16 +2,10 @@ import { css, type RemixNode } from 'remix/ui'
 
 import { BookingForm } from '../assets/booking-form.tsx'
 import { Effects } from '../assets/effects.tsx'
+import { Showcase } from '../assets/showcase.tsx'
 import { routes } from '../routes.ts'
 import { Document } from './document.tsx'
-import {
-  IconCart,
-  IconCheck,
-  IconCode,
-  IconDesign,
-  IconGauge,
-  IconServer,
-} from './icons.tsx'
+import { IconCheck } from './icons.tsx'
 import {
   Container,
   Eyebrow,
@@ -20,9 +14,10 @@ import {
   PrimaryCta,
   SecondaryCta,
   Section,
+  Wordmark,
 } from './theme.tsx'
 
-const BOOK_HREF = routes.book.href()
+const CONTACT_HREF = routes.contact.href()
 
 export function HomePage() {
   return ({ booked = false }: { booked?: boolean }) => (
@@ -31,7 +26,7 @@ export function HomePage() {
       <main>
         <Hero />
         <TrustBar />
-        <Services />
+        <Showcase />
         <Process />
         <Proof />
         <BookingSection booked={booked} />
@@ -114,32 +109,6 @@ function NavBar() {
         </div>
       </Container>
     </nav>
-  )
-}
-
-function Wordmark() {
-  return () => (
-    <span
-      mix={css({
-        display: 'inline-flex',
-        alignItems: 'center',
-        gap: '10px',
-        fontSize: '21px',
-        fontWeight: 800,
-        letterSpacing: '-0.02em',
-      })}
-    >
-      <span
-        mix={css({
-          width: '12px',
-          height: '12px',
-          borderRadius: '4px',
-          backgroundImage: 'var(--brand-grad)',
-          boxShadow: '0 0 16px rgba(32,170,255,0.7)',
-        })}
-      />
-      inweb
-    </span>
   )
 }
 
@@ -352,139 +321,6 @@ function Header() {
 }
 
 // ===========================================================================
-// Services
-// ===========================================================================
-const SERVICES = [
-  {
-    icon: <IconDesign />,
-    title: 'Webdesign & UX',
-    body: 'Markenstarke Interfaces, die Vertrauen schaffen und Besucher gezielt zum Abschluss führen.',
-    tag: 'Figma · Designsysteme',
-  },
-  {
-    icon: <IconCode />,
-    title: 'Frontend-Entwicklung',
-    body: 'Pixelgenaue, blitzschnelle Umsetzung mit modernen Frameworks — barrierefrei und responsiv.',
-    tag: 'Remix · React · TS',
-  },
-  {
-    icon: <IconServer />,
-    title: 'Backend & APIs',
-    body: 'Datenbanken, Auth und APIs, die mitwachsen. Dein Produkt steht auf einem soliden Fundament.',
-    tag: 'Node · SQL · REST',
-  },
-  {
-    icon: <IconCart />,
-    title: 'E-Commerce & Shops',
-    body: 'Verkaufsstarke Shops mit Zahlungsanbindung, Checkout-Optimierung und Warenwirtschaft.',
-    tag: 'Stripe · Headless',
-  },
-  {
-    icon: <IconGauge />,
-    title: 'Performance & SEO',
-    body: 'Core Web Vitals im grünen Bereich und technisches SEO, damit du gefunden wirst.',
-    tag: 'Lighthouse 95+',
-  },
-]
-
-function Services() {
-  return () => (
-    <Section id="leistungen">
-      <Container>
-        <Header
-          kicker="Was wir bauen"
-          title={<>Alles für deinen Web-Auftritt — aus einer Hand.</>}
-          lead="Fünf Disziplinen, ein Team. Kein Schnittstellen-Ping-Pong zwischen Agenturen."
-        />
-        <div
-          mix={css({
-            display: 'grid',
-            gap: '20px',
-            gridTemplateColumns: '1fr',
-            '@media (min-width: 640px)': { gridTemplateColumns: '1fr 1fr' },
-            '@media (min-width: 1040px)': { gridTemplateColumns: 'repeat(3, 1fr)' },
-          })}
-        >
-          {SERVICES.map((s, i) => (
-            <div data-reveal data-reveal-delay={`${(i % 3) * 90}`}>
-              <ServiceCard icon={s.icon} title={s.title} body={s.body} tag={s.tag} />
-            </div>
-          ))}
-        </div>
-      </Container>
-    </Section>
-  )
-}
-
-function ServiceCard() {
-  return ({
-    icon,
-    title,
-    body,
-    tag,
-  }: {
-    icon: RemixNode
-    title: string
-    body: string
-    tag: string
-  }) => (
-    <article
-      data-tilt
-      mix={css({
-        position: 'relative',
-        height: '100%',
-        padding: '28px',
-        borderRadius: '20px',
-        background: 'var(--surface)',
-        border: '1px solid var(--border)',
-        overflow: 'hidden',
-        transition: 'border-color 300ms ease, background 300ms ease',
-        '&::before': {
-          content: '""',
-          position: 'absolute',
-          inset: 0,
-          background:
-            'radial-gradient(320px circle at var(--mx, 50%) var(--my, 0%), rgba(32,170,255,0.16), transparent 60%)',
-          opacity: 0,
-          transition: 'opacity 300ms ease',
-          pointerEvents: 'none',
-        },
-        '&:hover': { borderColor: 'var(--border-strong)', background: 'var(--surface-2)' },
-        '&:hover::before': { opacity: 1 },
-      })}
-    >
-      <div
-        mix={css({
-          display: 'grid',
-          placeItems: 'center',
-          width: '52px',
-          height: '52px',
-          borderRadius: '14px',
-          marginBottom: '20px',
-          color: 'var(--text)',
-          background: 'rgba(255,255,255,0.04)',
-          border: '1px solid var(--border)',
-        })}
-      >
-        {icon}
-      </div>
-      <h3 mix={css({ fontSize: '20px', fontWeight: 700, marginBottom: '10px' })}>{title}</h3>
-      <p mix={css({ fontSize: '15px', color: 'var(--muted)', marginBottom: '18px' })}>{body}</p>
-      <span
-        mix={css({
-          fontFamily: FONT_MONO,
-          fontSize: '12px',
-          letterSpacing: '0.04em',
-          color: 'var(--faint)',
-        })}
-      >
-        {tag}
-      </span>
-    </article>
-  )
-}
-
-// ===========================================================================
 // Process
 // ===========================================================================
 const STEPS = [
@@ -554,24 +390,31 @@ const stepNumStyle = css({
 })
 
 // ===========================================================================
-// Proof — testimonials + animated stats
+// Proof — project references + animated stats
 // ===========================================================================
-const TESTIMONIALS = [
-  [
-    'inweb hat unseren Umsatz über die Website innerhalb von drei Monaten verdoppelt. Design, Technik und Tempo — alles top.',
-    'Lena Hofmann',
-    'Gründerin, Helios Studio',
-  ],
-  [
-    'Endlich eine Agentur, die auch das Backend wirklich versteht. Unsere Plattform skaliert problemlos.',
-    'Marc Rieder',
-    'CTO, NordVolt',
-  ],
-  [
-    'Vom ersten Gespräch bis zum Launch in sechs Wochen. Professionell, transparent, einfach stark.',
-    'Sara Brandt',
-    'Marketing-Leitung, Kanto',
-  ],
+//
+// Replace the placeholder image/title/text per project. Images live in
+// public/projects/ — swap the SVGs for real screenshots (e.g. .jpg/.webp) and
+// update the `image` path.
+const PROJECTS = [
+  {
+    image: '/projects/project-1.svg',
+    title: 'Helios Studio — Markenwebsite',
+    body: 'Neues Markenbild mit headless CMS. Conversion-Rate nach dem Relaunch verdoppelt.',
+    tags: ['Webdesign', 'CMS', 'SEO'],
+  },
+  {
+    image: '/projects/project-2.svg',
+    title: 'NordVolt — SaaS-Plattform',
+    body: 'Full-Stack-Plattform mit Auth, Dashboard und skalierbarer API auf solidem Backend.',
+    tags: ['Frontend', 'Backend', 'API'],
+  },
+  {
+    image: '/projects/project-3.svg',
+    title: 'Kanto — Online-Shop',
+    body: 'Headless Shop mit Stripe-Checkout und optimiertem Funnel für mehr Bestellungen.',
+    tags: ['E-Commerce', 'Stripe', 'Performance'],
+  },
 ]
 
 const STATS = [
@@ -587,8 +430,8 @@ function Proof() {
       <Container>
         <Header
           kicker="Referenzen"
-          title={<>Ergebnisse, die für sich sprechen.</>}
-          lead="Was Kund:innen über die Zusammenarbeit mit inweb sagen."
+          title={<>Ausgewählte Projekte aus unserer Arbeit.</>}
+          lead="Ein kleiner Auszug — von der Markenwebsite bis zur skalierbaren Plattform."
         />
         <div
           mix={css({
@@ -596,26 +439,14 @@ function Proof() {
             gap: '20px',
             gridTemplateColumns: '1fr',
             marginBottom: '56px',
-            '@media (min-width: 920px)': { gridTemplateColumns: 'repeat(3, 1fr)' },
+            '@media (min-width: 640px)': { gridTemplateColumns: '1fr 1fr' },
+            '@media (min-width: 960px)': { gridTemplateColumns: 'repeat(3, 1fr)' },
           })}
         >
-          {TESTIMONIALS.map(([quote, name, role], i) => (
-            <figure data-reveal data-reveal-delay={`${(i % 3) * 90}`} mix={quoteStyle}>
-              <div mix={css({ display: 'flex', gap: '3px', marginBottom: '14px' })}>
-                {[0, 1, 2, 3, 4].map(() => (
-                  <Star />
-                ))}
-              </div>
-              <blockquote mix={css({ fontSize: '16px', lineHeight: 1.6, margin: 0 })}>
-                “{quote}”
-              </blockquote>
-              <figcaption mix={css({ marginTop: '20px' })}>
-                <div mix={css({ fontWeight: 700 })}>{name}</div>
-                <div mix={css({ fontSize: '14px', color: 'var(--faint)', fontFamily: FONT_MONO })}>
-                  {role}
-                </div>
-              </figcaption>
-            </figure>
+          {PROJECTS.map((p, i) => (
+            <div data-reveal data-reveal-delay={`${(i % 3) * 90}`}>
+              <ProjectCard image={p.image} title={p.title} body={p.body} tags={p.tags} />
+            </div>
           ))}
         </div>
         <div
@@ -661,24 +492,66 @@ function Proof() {
   )
 }
 
-function Star() {
-  return () => (
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="#FFDF5F" aria-hidden="true">
-      <path d="M12 2l2.9 6.3 6.9.7-5.1 4.6 1.4 6.8L12 17.8 5.9 21l1.4-6.8L2.2 9.6l6.9-.7z" />
-    </svg>
+function ProjectCard() {
+  return ({
+    image,
+    title,
+    body,
+    tags,
+  }: {
+    image: string
+    title: string
+    body: string
+    tags: string[]
+  }) => (
+    <article data-tilt mix={projectStyle}>
+      <div mix={css({ aspectRatio: '16 / 10', overflow: 'hidden', background: 'var(--surface-2)' })}>
+        <img
+          src={image}
+          alt={title}
+          loading="lazy"
+          mix={css({
+            width: '100%',
+            height: '100%',
+            objectFit: 'cover',
+            transition: 'transform 500ms cubic-bezier(0.2,0.8,0.2,1)',
+          })}
+        />
+      </div>
+      <div mix={css({ padding: '22px', display: 'flex', flexDirection: 'column', gap: '12px' })}>
+        <h3 mix={css({ fontSize: '19px', fontWeight: 700 })}>{title}</h3>
+        <p mix={css({ fontSize: '15px', color: 'var(--muted)' })}>{body}</p>
+        <div mix={css({ display: 'flex', flexWrap: 'wrap', gap: '8px', marginTop: '2px' })}>
+          {tags.map((t) => (
+            <span mix={tagStyle}>{t}</span>
+          ))}
+        </div>
+      </div>
+    </article>
   )
 }
 
-const quoteStyle = css({
+const projectStyle = css({
   display: 'flex',
   flexDirection: 'column',
   height: '100%',
-  padding: '28px',
   borderRadius: '20px',
+  overflow: 'hidden',
   background: 'var(--surface)',
   border: '1px solid var(--border)',
   transition: 'transform 300ms ease, border-color 300ms ease',
-  '&:hover': { transform: 'translateY(-4px)', borderColor: 'var(--border-strong)' },
+  '&:hover': { borderColor: 'var(--border-strong)' },
+  '&:hover img': { transform: 'scale(1.05)' },
+})
+
+const tagStyle = css({
+  fontFamily: FONT_MONO,
+  fontSize: '12px',
+  letterSpacing: '0.03em',
+  color: 'var(--muted)',
+  padding: '4px 10px',
+  borderRadius: '999px',
+  border: '1px solid var(--border)',
 })
 
 // ===========================================================================
@@ -759,7 +632,7 @@ function BookingSection() {
             })}
           >
             {booked ? <NoJsSuccess /> : null}
-            <BookingForm action={BOOK_HREF} />
+            <BookingForm action={CONTACT_HREF} />
           </div>
         </div>
       </Container>
@@ -787,9 +660,9 @@ function NoJsSuccess() {
 }
 
 // ===========================================================================
-// Footer
+// Footer (shared with the legal pages)
 // ===========================================================================
-function Footer() {
+export function Footer() {
   return () => (
     <footer mix={css({ borderTop: '1px solid var(--border)', paddingBlock: '48px' })}>
       <Container wide>
@@ -800,7 +673,7 @@ function Footer() {
             gap: '24px',
             alignItems: 'center',
             textAlign: 'center',
-            '@media (min-width: 720px)': {
+            '@media (min-width: 800px)': {
               flexDirection: 'row',
               justifyContent: 'space-between',
               textAlign: 'left',
@@ -808,23 +681,36 @@ function Footer() {
           })}
         >
           <div mix={css({ display: 'flex', flexDirection: 'column', gap: '8px' })}>
-            <Wordmark />
+            <a href="/" mix={css({ textDecoration: 'none', width: 'fit-content' })}>
+              <Wordmark />
+            </a>
             <p mix={css({ fontSize: '14px', color: 'var(--faint)' })}>
               Vollständige Webentwicklung mit Backend.
             </p>
           </div>
-          <div mix={css({ display: 'flex', gap: '24px', fontSize: '14px', color: 'var(--muted)' })}>
-            <a href="#leistungen" mix={footLink}>
+          <div
+            mix={css({
+              display: 'flex',
+              flexWrap: 'wrap',
+              justifyContent: 'center',
+              gap: '20px 24px',
+              fontSize: '14px',
+            })}
+          >
+            <a href="/#leistungen" mix={footLink}>
               Leistungen
             </a>
-            <a href="#ablauf" mix={footLink}>
-              Ablauf
+            <a href="/#referenzen" mix={footLink}>
+              Referenzen
             </a>
-            <a href="#kontakt" mix={footLink}>
+            <a href="/#kontakt" mix={footLink}>
               Kontakt
             </a>
-            <a href="mailto:hallo@inweb.page" mix={footLink}>
-              hallo@inweb.page
+            <a href={routes.datenschutz.href()} mix={footLink}>
+              Datenschutz
+            </a>
+            <a href={routes.impressum.href()} mix={footLink}>
+              Impressum
             </a>
           </div>
         </div>
@@ -839,7 +725,7 @@ function Footer() {
             textAlign: 'center',
           })}
         >
-          © {new Date().getFullYear()} inweb · Alle Rechte vorbehalten
+          © {new Date().getFullYear()} Inweb UG · Alle Rechte vorbehalten
         </div>
       </Container>
     </footer>

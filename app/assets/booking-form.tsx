@@ -8,8 +8,6 @@ interface BookingFormProps extends SerializableProps {
 
 type Status = 'idle' | 'submitting' | 'success' | 'error'
 
-const BUDGETS = ['< 5.000 €', '5.000 – 15.000 €', '15.000 – 40.000 €', '> 40.000 €', 'Noch unklar']
-
 /**
  * The conversion centerpiece. It is a real `<form method="post">` that works
  * without JavaScript (the server handles the POST and redirects). When
@@ -97,19 +95,11 @@ export const BookingForm = clientEntry(
           />
 
           <label mix={labelStyle}>
-            Projektbudget
-            <select name="budget" mix={controlStyle}>
-              {BUDGETS.map((b) => (
-                <option value={b}>{b}</option>
-              ))}
-            </select>
-          </label>
-
-          <label mix={labelStyle}>
             Worum geht es?
             <textarea
               name="message"
               rows={4}
+              required
               placeholder="Erzähl uns kurz von deinem Vorhaben …"
               mix={[controlStyle, css({ resize: 'vertical', minHeight: '110px' })]}
             />

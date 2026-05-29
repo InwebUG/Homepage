@@ -3,9 +3,9 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "node --watch --import remix/node-tsx server.ts",
-    "start": "node --import remix/node-tsx server.ts",
-    "test": "node --import remix/node-tsx --test",
+    "dev": "node --env-file-if-exists=.env --watch --import remix/node-tsx server.ts",
+    "start": "node --env-file-if-exists=.env --import remix/node-tsx server.ts",
+    "test": "node --env-file-if-exists=.env --import remix/node-tsx --test",
     "typecheck": "tsc --noEmit"
   },
   "engines": {

@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" fill="none">
+  <defs>
+    <linearGradient id="bg2" x1="0" y1="0" x2="800" y2="500" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#11131b"/><stop offset="1" stop-color="#171a24"/>
+    </linearGradient>
+    <radialGradient id="gl2" cx="0" cy="0" r="1" gradientTransform="translate(560 160) scale(360)" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#80E464" stop-opacity="0.4"/><stop offset="1" stop-color="#80E464" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="800" height="500" fill="url(#bg2)"/>
+  <rect width="800" height="500" fill="url(#gl2)"/>
+  <g stroke="#F4EEE8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" opacity="0.9" fill="none">
+    <rect x="150" y="120" width="500" height="280" rx="16"/>
+    <line x1="270" y1="120" x2="270" y2="400"/>
+    <rect x="185" y="160" width="50" height="10" rx="5"/>
+    <rect x="185" y="200" width="50" height="10" rx="5"/>
+    <rect x="185" y="240" width="50" height="10" rx="5" stroke="#F0965A"/>
+    <rect x="310" y="160" width="140" height="80" rx="12"/>
+    <rect x="470" y="160" width="140" height="80" rx="12" stroke="#F0965A"/>
+    <polyline points="320,360 360,320 400,340 450,290 510,310 600,260"/>
+    <circle cx="450" cy="290" r="5" fill="#F0965A" stroke="none"/>
+  </g>
+  <text x="40" y="460" fill="#6a7080" font-family="monospace" font-size="20">NordVolt · Platzhalter</text>
+</svg>

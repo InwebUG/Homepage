@@ -3,13 +3,10 @@ import { staticFiles } from 'remix/middleware/static'
 import { createRouter, type MiddlewareContext } from 'remix/router'
 
 import controller from './actions/controller.tsx'
-import { loadDatabase } from './middleware/database.ts'
 import { render } from './middleware/render.tsx'
 import { routes } from './routes.ts'
 
-type AppContext = MiddlewareContext<
-  [ReturnType<typeof render>, ReturnType<typeof formData>, ReturnType<typeof loadDatabase>]
->
+type AppContext = MiddlewareContext<[ReturnType<typeof render>, ReturnType<typeof formData>]>
 
 declare module 'remix/router' {
   interface RouterTypes {
@@ -18,12 +15,7 @@ declare module 'remix/router' {
 }
 
 export const router = createRouter<AppContext>({
-  middleware: [
-    staticFiles('./public', { index: false }),
-    render(),
-    formData(),
-    loadDatabase(),
-  ],
+  middleware: [staticFiles('./public', { index: false }), render(), formData()],
 })
 
 router.map(routes, controller)
