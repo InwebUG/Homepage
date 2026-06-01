@@ -1,5 +1,5 @@
 {
-  "name": "inweb-onepager",
+  "name": "inweb-homepage",
   "private": true,
   "type": "module",
   "scripts": {
@@ -12,7 +12,7 @@
     "node": ">=24.3.0"
   },
   "dependencies": {
-    "remix": "^3.0.0-beta.2"
+    "remix": "3.0.0-beta.2"
   },
   "devDependencies": {
     "@types/node": "latest",

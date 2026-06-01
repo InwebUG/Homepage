@@ -1,9 +1,10 @@
-# inweb — Agentur-Onepager (Remix 3)
+# inweb — Agentur-Website (Remix 3)
 
-Ein vollständiger, stark animierter Onepager für eine Full-Stack-Webagentur. Gebaut
-mit **Remix 3** (`remix@3.0.0-beta.2`). Der Nutzerflow ist konsequent auf **einen
-Terminabschluss** ausgerichtet: jede Sektion endet in einem Call-to-Action, der zum
-Kontaktformular führt.
+Eine vollständige, stark animierte Website für eine Full-Stack-Webagentur: eine
+Startseite plus Unterseiten (Referenz-Detailseiten, Datenschutz, Impressum). Gebaut
+mit **Remix 3** (`remix@3.0.0-beta.2`). Der Nutzerflow ist konsequent auf einen
+**Terminabschluss** ausgerichtet: jede Sektion endet in einem Call-to-Action, der
+zum Kontaktformular führt.
 
 ## Voraussetzungen
 
@@ -22,6 +23,22 @@ npm run dev        # http://localhost:44100
 ```
 
 Weitere Skripte: `npm run start`, `npm run typecheck`.
+
+## Deployment (Node-Host)
+
+Dies ist ein **Node-SSR-Server** (kein statischer Build) — er muss als dauerhafter
+Prozess laufen (`npm start`). Geeignet sind Node-Hosts wie **Render, Railway,
+Fly.io** oder ein eigener VPS. **Nicht** geeignet: statisches Hosting bzw.
+Cloudflare Pages.
+
+- **Render (One-Click):** `render.yaml` ist enthalten — in Render *New → Blueprint*,
+  Repo verbinden, anschließend `SUPABASE_ANON_KEY` in den Environment-Variablen
+  setzen.
+- **Container (Railway / Fly.io / VPS / Cloud Run):** das `Dockerfile` baut ein
+  lauffähiges Image (`npm ci` + `npm start`). Den Port liefert der Host via `PORT`.
+
+Pflicht-Env-Variable in jedem Fall: **`SUPABASE_ANON_KEY`**. Node-Version **≥ 24.3**
+(Image/Blueprint sind auf 24.16.0 gepinnt, dessen npm 10.9.2 zur Lockfile passt).
 
 ## Kontaktformular → Supabase
 

@@ -1,7 +1,7 @@
 import { css, type RemixNode } from 'remix/ui'
 
 /**
- * Shared visual language for the onepager. The palette is a dark, high-contrast
+ * Shared visual language for the site. The palette is a dark, high-contrast
  * canvas with the Remix-style five-stop rainbow used for accents and glows.
  */
 
