@@ -30,9 +30,17 @@ function wantsJson(request: Request): boolean {
 export default createController(routes, {
   actions: {
     async assets(context) {
-      return (
-        (await assetServer.fetch(context.request)) ?? new Response('Not Found', { status: 404 })
-      )
+      let response = await assetServer.fetch(context.request)
+      if (!response) return new Response('Not Found', { status: 404 })
+      // Let browsers cache compiled assets between navigations (no client-side
+      // router here, so every page change re-requests them). Short max-age keeps
+      // staleness after a deploy small; the ETag still allows revalidation.
+      if (process.env.NODE_ENV === 'production') {
+        let headers = new Headers(response.headers)
+        headers.set('cache-control', 'public, max-age=300, stale-while-revalidate=86400')
+        return new Response(response.body, { status: response.status, headers })
+      }
+      return response
     },
 
     home(context) {
