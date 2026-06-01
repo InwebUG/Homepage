@@ -10,6 +10,9 @@ export interface DocumentProps {
   description?: string
 }
 
+const FONTS_HREF =
+  'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap'
+
 const DEFAULT_TITLE = 'inweb — Webentwicklung & Design mit Backend'
 const DEFAULT_DESCRIPTION =
   'inweb baut Websites, die verkaufen: Design, Frontend und skalierbares Backend aus einer Hand. Jetzt kostenloses Erstgespräch sichern.'
@@ -81,7 +84,7 @@ export function Document() {
             reliably reveal it again. The failsafe reveals everything if the
             effects layer never hydrates (e.g. asset load failure). */}
         <script>
-          {`document.documentElement.classList.add('js');setTimeout(function(){if(!window.__fx)document.documentElement.classList.add('no-fx')},3000)`}
+          {`document.documentElement.classList.add('js');setTimeout(function(){if(!window.__fx)document.documentElement.classList.add('no-fx')},2000)`}
         </script>
         <meta name="color-scheme" content="dark" />
         <meta name="description" content={description} />
@@ -89,12 +92,18 @@ export function Document() {
         <meta property="og:description" content={description} />
         <meta property="og:type" content="website" />
         <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+        <link rel="modulepreload" href={routes.assets.href({ path: 'app/assets/entry.ts' })} />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link
-          rel="stylesheet"
-          href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap"
-        />
+        {/* Load fonts without blocking first paint; text shows immediately via
+            display=swap. The inline script attaches the stylesheet async. */}
+        <link rel="preload" as="style" href={FONTS_HREF} />
+        <noscript>
+          <link rel="stylesheet" href={FONTS_HREF} />
+        </noscript>
+        <script>
+          {`(function(){var l=document.createElement('link');l.rel='stylesheet';l.href=${JSON.stringify(FONTS_HREF)};document.head.appendChild(l)})()`}
+        </script>
         <title>{title}</title>
         <style>{GLOBAL_CSS}</style>
       </head>
