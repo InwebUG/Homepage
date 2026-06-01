@@ -133,6 +133,29 @@ function routeEdge(edge: Edge, w: number, h: number): string {
   return `M${start.x.toFixed(1)} ${start.y.toFixed(1)} Q${ctrl.x.toFixed(1)} ${ctrl.y.toFixed(1)} ${end.x.toFixed(1)} ${end.y.toFixed(1)}`
 }
 
+// Re-applies the current URL hash after a layout-shifting section has grown,
+// jumping instantly (overriding the page's smooth scroll) to the now-correct
+// position. Runs across a few frames so it still lands if the new height is
+// committed a frame late; instant re-scrolls to an already-correct spot are
+// invisible no-ops.
+function landOnHash(signal: AbortSignal) {
+  if (!location.hash || location.hash === '#') return
+  let target: HTMLElement | null
+  try {
+    target = document.getElementById(decodeURIComponent(location.hash.slice(1)))
+  } catch {
+    return
+  }
+  if (!target) return
+  let frames = 0
+  const settle = () => {
+    if (signal.aborted || !target) return
+    target.scrollIntoView({ behavior: 'instant', block: 'start' })
+    if (++frames < 4) requestAnimationFrame(settle)
+  }
+  requestAnimationFrame(settle)
+}
+
 export const Showcase = clientEntry(import.meta.url, function Showcase(handle: Handle) {
   // State (overview by default; SSR renders the stacked, no-JS-friendly list).
   let pinned = false
@@ -160,6 +183,7 @@ export const Showcase = clientEntry(import.meta.url, function Showcase(handle: H
 
   function setupScroll(section: HTMLElement, signal: AbortSignal) {
     const mq = window.matchMedia('(min-width: 960px)')
+    let firstPin = true
 
     const applyProgress = () => {
       if (!pinned) return
@@ -186,12 +210,22 @@ export const Showcase = clientEntry(import.meta.url, function Showcase(handle: H
     const syncMode = () => {
       const next = mq.matches
       if (next !== pinned) {
+        const justPinned = next && firstPin
         pinned = next
         if (!pinned) {
           mode = 'overview'
           hover = null
         }
         handle.update()
+        // The first time we grow to the pinned (multi-viewport) height, the
+        // browser's initial scroll-to-hash — computed against the short SSR
+        // layout — now points into the middle of this section. Re-resolve it so
+        // deep links (#referenzen, footer links, "back to references") land on
+        // the section the visitor actually asked for.
+        if (justPinned) {
+          firstPin = false
+          landOnHash(signal)
+        }
       }
       applyProgress()
     }
