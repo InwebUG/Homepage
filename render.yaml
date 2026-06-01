@@ -1,0 +1,17 @@
+# Render Blueprint — one-click Node host for the inweb website.
+# In Render: New → Blueprint → connect this repo. Then set SUPABASE_ANON_KEY
+# in the service's Environment (it is intentionally not stored in the repo).
+services:
+  - type: web
+    name: inweb-homepage
+    runtime: node
+    plan: free
+    buildCommand: npm ci
+    startCommand: npm start
+    healthCheckPath: /
+    autoDeploy: true
+    envVars:
+      - key: NODE_VERSION
+        value: "24.16.0"
+      - key: SUPABASE_ANON_KEY
+        sync: false # set this value in the Render dashboard
